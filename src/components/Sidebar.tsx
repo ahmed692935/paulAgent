@@ -95,7 +95,7 @@
 import { useState } from "react";
 import { BiMenu, BiX } from "react-icons/bi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import Logo from "../../public/images/sumaLogo.png";
+// import Logo from "../../public/images/sumaLogo.png";
 import { logout } from "../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -131,7 +131,8 @@ const Sidebar = () => {
           } fixed lg:static top-0 left-0 min-h-[100vh] w-64 bg-white text-black transform lg:translate-x-0 transition-transform duration-300 z-50`}
       >
         <div className="flex items-center justify-between p-4 border-b border-black">
-          <img src={Logo} width={150} />
+          {/* <img src={Logo} width={150} /> */}
+          <p className="text-4xl font-bold text-[#3F3EED] mx-5">Paul</p>
           <button
             className="lg:hidden text-black"
             onClick={() => setOpen(false)}
@@ -148,8 +149,8 @@ const Sidebar = () => {
                 key={item.path}
                 to={item.path}
                 className={`px-3 py-2 rounded relative transition-colors duration-200 pl-5 ${isActive
-                    ? "bg-blue-100 text-[#3F3EED] font-semibold"
-                    : "text-black hover:bg-blue-100"
+                  ? "bg-blue-100 text-[#3F3EED] font-semibold"
+                  : "text-black hover:bg-blue-100"
                   }`}
                 onClick={() => setOpen(false)}
               >
