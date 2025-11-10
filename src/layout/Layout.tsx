@@ -28,7 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex w-full">
       {/* Fixed Sidebar */}
-      <div className="fixed top-0 left-0 h-screen w-64 z-50 mt-3">
+      <div className="fixed top-0 left-0 h-screen w-64 z-50">
         <Sidebar />
       </div>
 
