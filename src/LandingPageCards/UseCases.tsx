@@ -45,13 +45,13 @@ function UseCases() {
         <section className="py-16 px-4 md:px-8 text-center bg-white flex flex-col items-center">
             {/* Header */}
             <div className="flex flex-col items-center max-w-lg w-full">
-                <span className="px-4 py-1 border border-blue-500 rounded-full text-xs text-black">
+                <span className="px-4 py-1 border border-blue-900 rounded-full text-xs text-black">
                     Use Cases
                 </span>
                 <h2 className="text-[clamp(1.25rem,5vw,2rem)] font-bold text-gray-900 mt-4">
                     Who Benefits from Paul.ai
                 </h2>
-                <p className="text-blue-500 mt-2 text-[clamp(0.875rem,3vw,1rem)] max-w-md">
+                <p className="text-blue-900 mt-2 text-[clamp(0.875rem,3vw,1rem)] max-w-md">
                     Sales & Lead Generation – Let Paul handle cold calls, lead qualification, and follow-ups so you can focus on closing deals.
                 </p>
             </div>

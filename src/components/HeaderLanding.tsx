@@ -37,7 +37,7 @@ function HeaderLanding() {
                             <li
                                 key={index}
                                 className={`list-none cursor-pointer font-semibold transition-colors duration-200 text-base ${isScrolled
-                                    ? "text-blue-500 hover:text-blue-900"
+                                    ? "text-blue-900 hover:text-blue-500"
                                     : "text-white hover:text-blue-900"
                                     }`}
                             >

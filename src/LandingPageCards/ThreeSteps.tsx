@@ -24,7 +24,7 @@ function ThreeSteps() {
             <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold mb-2 text-gray-900">
                 3 Easy Steps to Smarter, AI-Powered Calls
             </h2>
-            <p className="text-blue-500 text-[clamp(0.875rem,2vw,1rem)] mb-8">
+            <p className="text-blue-900 text-[clamp(0.875rem,2vw,1rem)] mb-8">
                 Boost Engagement and Drive Results with Paul.ai
             </p>
 

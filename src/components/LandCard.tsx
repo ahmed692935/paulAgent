@@ -39,12 +39,12 @@ const LandCard: React.FC<LandCardProps> = ({
 
             {/* Title */}
             {title && (
-                <h3 className="text-sm font-semibold mb-2 text-blue-500">{title}</h3>
+                <h3 className="text-sm font-semibold mb-2 text-black">{title}</h3>
             )}
 
             {/* Sub Title */}
             {subtitle && (
-                <h3 className="text-lg font-semibold mb-2 text-blue-500">{subtitle}</h3>
+                <h3 className="text-lg font-semibold mb-2 text-blue-900">{subtitle}</h3>
             )}
 
             {/* Value (Optional) */}

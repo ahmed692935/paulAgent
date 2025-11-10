@@ -13,8 +13,7 @@ function BannerLand() {
                     />
 
                     {/* Gradient Overlay */}
-                    <div className="absolute z-10 bottom-0 left-0 right-0 h-full bg-gradient-to-t from-white/100 via-white/70 to-white/10 pointer-events-none"></div>
-
+                    <div className="absolute z-10 bottom-0 left-0 right-0 h-full bg-gradient-to-t from-white/100 via-white/85 to-white/20 pointer-events-none"></div>
 
                     <h2
                         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 font-bold md:tracking-[5vw] tracking-[3vw] md:tracking-[35px] text-[clamp(100px,20vw,300px)]"
