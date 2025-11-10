@@ -37,7 +37,7 @@ function HeaderLanding() {
                             <li
                                 key={index}
                                 className={`list-none cursor-pointer font-semibold transition-colors duration-200 text-base ${isScrolled
-                                    ? "text-blue-900 hover:text-blue-500"
+                                    ? "text-blue-900 hover:text-blue-700"
                                     : "text-white hover:text-blue-900"
                                     }`}
                             >
@@ -101,7 +101,7 @@ function HeaderLanding() {
                                 <li
                                     key={index}
                                     onClick={() => setMenuOpen(false)}
-                                    className="cursor-pointer text-blue-900 font-semibold text-lg hover:text-blue-600 transition-colors duration-200"
+                                    className="cursor-pointer text-blue-900 font-semibold text-lg hover:text-blue-700 transition-colors duration-200"
                                 >
                                     {item}
                                 </li>
