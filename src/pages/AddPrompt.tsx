@@ -103,6 +103,12 @@
 
 // export default AddPrompt;
 
+
+
+
+
+
+// Previous Code
 import { useEffect, useState } from "react";
 import { FiPlus, FiEdit2, FiCheck } from "react-icons/fi";
 import { updateSystemPrompt, getSystemPrompt } from "../api/Call";
@@ -190,7 +196,7 @@ const AddPrompt = () => {
   return (
     <div className="flex flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-2xl p-7">
-        <h1 className="text-2xl font-bold text-center mb-10 text-[#3F3EED]">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-10 text-blue-500">
           Prompt Manager
         </h1>
         <p className="text-gray-600 text-center mb-8">
@@ -203,18 +209,17 @@ const AddPrompt = () => {
           onChange={(e) => setPrompt(e.target.value)}
           rows={3}
           placeholder="Type your prompt here..."
-          className="w-full border border-[#3F3EED] rounded-sm px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#3F3EED] mb-4 resize-none"
+          className="w-full border border-blue-500 rounded-sm px-4 py-3 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 mb-4 resize-none"
         />
 
         {/* ✅ Loader-enabled Button */}
         <button
           onClick={handleAddOrUpdate}
           disabled={!prompt.trim() || isSubmitting}
-          className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-white font-medium transition-all ${
-            !prompt.trim() || isSubmitting
-              ? "bg-[#3F3EED]/50 cursor-not-allowed"
-              : "bg-[#3F3EED] hover:bg-[#2d2ce0]"
-          }`}
+          className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-white font-medium transition-all ${!prompt.trim() || isSubmitting
+            ? "bg-blue-500/50 cursor-not-allowed"
+            : "bg-blue-500 hover:bg-blue-900 cursor-pointer"
+            }`}
         >
           {isSubmitting ? (
             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -226,17 +231,17 @@ const AddPrompt = () => {
           {isSubmitting
             ? "Saving..."
             : isEditing
-            ? "Update Prompt"
-            : "Add Prompt"}
+              ? "Update Prompt"
+              : "Add Prompt"}
         </button>
 
         {/* ✅ Table Section */}
         <div className="mt-8">
-          <h2 className="text-lg font-semibold text-[#3F3EED] mb-3">
+          <h2 className="text-xl font-bold text-blue-500 mb-3">
             Saved Prompt
           </h2>
-          <table className="w-full border border-[#3F3EED] rounded-xl overflow-hidden">
-            <thead className="bg-[#3F3EED]/10 text-[#3F3EED] text-left">
+          <table className="w-full border border-blue-500 rounded-xl overflow-hidden">
+            <thead className="bg-blue-500/10 text-blue-900 text-left">
               <tr>
                 <th className="py-2 px-4">Prompt</th>
                 <th className="py-2 px-4 text-center">Actions</th>
@@ -286,3 +291,4 @@ const AddPrompt = () => {
 };
 
 export default AddPrompt;
+

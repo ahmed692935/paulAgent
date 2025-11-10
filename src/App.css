@@ -57,3 +57,19 @@
 .benef-card p {
   color: #e5e7eb !important;
 }
+
+.dash_call_table tbody tr::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  bottom: 0;
+  height: 1px;
+  width: 97%;
+  background-color: #d1d5dc;
+}
+
+.dash_call_table tbody tr:nth-last-child(1)::after {
+  display: none;
+}

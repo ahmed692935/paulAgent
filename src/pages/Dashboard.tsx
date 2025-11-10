@@ -752,7 +752,8 @@
 
 import { useEffect, useState } from "react";
 import type { RowData } from "../interfaces/dashboard";
-import { FiCheckCircle, FiPhone, FiXCircle } from "react-icons/fi";
+// import { FiCheckCircle, FiPhone, FiXCircle } from "react-icons/fi";
+import { Phone, CircleCheckBig, PhoneMissed } from 'lucide-react';
 
 import {
   PieChart,
@@ -985,7 +986,7 @@ const Dashboard = () => {
       <div className=" py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#3F3EED] mb-2">
+          <h1 className="text-4xl font-bold text-blue-500 mb-2"> {/*text-[#3F3EED]*/}
             Analytics Dashboard
           </h1>
           <p className="text-black">Monitor and analyze agent interactions</p>
@@ -999,15 +1000,18 @@ const Dashboard = () => {
                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl animate-fadeInUp"
           >
             <div>
-              <h3 className="text-lg font-semibold text-[#391f52]">
+              <h3 className="text-lg text-blue-500 font-semibold "> {/*text-[#391f52]*/}
                 Total Calls
               </h3>
               <p className="text-3xl font-bold text-gray-800 mt-1">
                 {totalCalls || 0}
               </p>
             </div>
-            <div className="bg-[#3F3EED] text-white p-4 rounded-lg flex items-center justify-center">
-              <FiPhone size={28} />
+            <div className="">
+              {/* <FiPhone size={28} /> */}
+              <Phone size={30}
+                className="text-blue-900"
+              />
             </div>
           </div>
 
@@ -1024,8 +1028,11 @@ const Dashboard = () => {
                 {successfulCalls}
               </p>
             </div>
-            <div className="bg-green-600 text-white p-4 rounded-lg flex items-center justify-center mr-4">
-              <FiCheckCircle size={24} />
+            <div className="">
+              {/* <FiCheckCircle size={24} /> */}
+              <CircleCheckBig size={30}
+                className="text-green-600"
+              />
             </div>
           </div>
 
@@ -1040,15 +1047,18 @@ const Dashboard = () => {
                 {queuedCalls}
               </p>
             </div>
-            <div className="bg-red-600 text-white p-4 rounded-lg flex items-center justify-center mr-4">
-              <FiXCircle size={24} />
+            <div className="">
+              {/* <FiXCircle size={24} /> */}
+              <PhoneMissed size={30}
+                className="text-red-600"
+              />
             </div>
           </div>
         </div>
 
         {/* Graph Section */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 my-5">
-          <h3 className="text-2xl font-bold text-[#3F3EED] mb-4">
+          <h3 className="text-2xl font-bold text-blue-500 mb-4"> {/*text-[#3F3EED]*/}
             Call Status Distribution
           </h3>
 
@@ -1078,12 +1088,12 @@ const Dashboard = () => {
 
 
         {/* Table Container */}
-        <div className="bg-white rounded-xl border border-blue-200 shadow-xl overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden dash_call_table">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 {/* <tr className="bg-[#391f52] to-purple-700 border-b border-purple-500"> */}
-                <tr className="bg-[#3F3EED] border-b border-blue-500">
+                <tr className="bg-blue-900 border-b border-blue-500">
                   <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
                     User Info
                   </th>
@@ -1110,80 +1120,17 @@ const Dashboard = () => {
                   </th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {calls?.map((row, index) => (
-                  <tr
-                    key={row.id}
-                    className={`border-b border-purple-100 hover:bg-purple-50 transition-colors duration-200 ${
-                      index % 2 === 0 ? "bg-purple-25" : "bg-white"
-                    }`}
-                  >
-                    <td className="px-4 py-4 text-gray-800 whitespace-nowrap">
-                      {row.username}
-                      <p className="text-xs">{row.email}</p>
-                      <p className="text-xs">{row.from_number || "N/A"}</p>
-                    </td>
-                    <td className="px-4 py-4 text-gray-700 whitespace-nowrap">
-                      {row.voice_name}
-                    </td>
-                    <td className="px-4 py-4 text-gray-700 whitespace-nowrap">
-                      {row.to_number}
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 py-1 rounded-full font-semibold
-      ${row.status === "completed" ? "bg-green-100 text-green-800" : ""}
-      ${row.status === "queued" ? "bg-gray-200 text-gray-800" : ""}
-      ${row.status === "failed" ? "bg-red-100 text-red-800" : ""}
-    `}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-                      {row.started_at
-                        ? new Date(row.started_at).toLocaleString()
-                        : "N/A"}
-                    </td>
-                    <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-                      {row.duration || "N/A"}
-                    </td>
-                    <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-                      {row.recording_url ? (
-                        <a
-                          href={row.recording_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-purple-600 underline"
-                        >
-                          Listen
-                        </a>
-                      ) : (
-                        "N/A"
-                      )}
-                    </td>
-                    <td className="px-4 py-4 text-center whitespace-nowrap">
-                      <button
-                        onClick={() => handleOpenModal(row)}
-                        className="px-4 py-2 cursor-pointer text-sm font-medium bg-[#391f52] text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-purple-500/25"
-                      >
-                        Details
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody> */}
               <tbody>
                 {/* ✅ Table level loading state */}
                 {loading ? (
                   <tr>
                     <td
                       colSpan={8}
-                      className="text-center py-10 text-[#391f52] font-medium"
+                      className="text-center py-10 text-blue-500 font-medium"
                     >
                       <div className="flex flex-col items-center space-y-2">
-                        <div className="w-8 h-8 border-4 border-[#3F3EED] border-t-[#5454f9] rounded-full animate-spin"></div>
-                        <p className="text-[#3F3EED]">Loading calls...</p>
+                        <div className="w-8 h-8 border-4 border-500 rounded-full animate-spin"></div>
+                        <p className="text-500">Loading calls...</p>
                       </div>
                     </td>
                   </tr>
@@ -1191,21 +1138,21 @@ const Dashboard = () => {
                   calls?.map((row, index) => (
                     <tr
                       key={row.id}
-                      className={`border-b border-blue-100 hover:bg-blue-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-blue-25" : "bg-white"
+                      className={`relative bg-white hover:bg-blue-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-blue-25" : "bg-white "
                         }`}
                     >
-                      <td className="px-4 py-4 text-gray-800 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-800 whitespace-nowrap">
                         {row.username}
                         <p className="text-xs">{row.email}</p>
                         {/* <p className="text-xs">{row.from_number || "N/A"}</p> */}
                       </td>
-                      <td className="px-4 py-4 text-gray-700 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
                         {row.voice_name}
                       </td>
-                      <td className="px-4 py-4 text-gray-700 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
                         {row.to_number}
                       </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
+                      <td className="px-4 py-2 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 rounded-full font-semibold
                     ${row.status === "completed" || row.status === "connected"
@@ -1226,41 +1173,16 @@ const Dashboard = () => {
                           {row.status}
                         </span>
                       </td>
-                      <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-600 whitespace-nowrap">
                         {row.started_at
                           ? new Date(row.started_at).toLocaleString()
                           : "N/A"}
                       </td>
-                      {/* <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-                        {row.duration ? Number(row.duration).toFixed(2) : "N/A"}
-                      </td> */}
-                      {/* <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-                        {row.recording_url ? (
-                          <a
-                            href={row.recording_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[#3F3EED] underline"
-                          >
-                            Listen
-                          </a>
-                        ) : (
-                          "N/A"
-                        )}
-                      </td> */}
-                      {/* <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
-                        <button
-                          onClick={() => handleListenRecording(row.call_id)}
-                          className="text-[#3F3EED] underline cursor-pointer hover:text-blue-700"
-                        >
-                          Listen
-                        </button>
-                      </td> */}
-                      <td className="px-4 py-4 text-gray-600 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-600 whitespace-nowrap">
                         <button
                           onClick={() => handleListenRecording(row.call_id)}
                           disabled={loadingRecordings === row.call_id}
-                          className={`flex items-center gap-2 text-[#3F3EED] underline cursor-pointer 
+                          className={`flex items-center gap-2 text-blue-500 underline cursor-pointer 
       ${loadingRecordings === row.call_id
                               ? "opacity-60 pointer-events-none"
                               : "hover:text-blue-700"
@@ -1268,7 +1190,7 @@ const Dashboard = () => {
                         >
                           {loadingRecordings === row.call_id ? (
                             <>
-                              <div className="w-4 h-4 border-2 border-[#3F3EED] border-t-transparent rounded-full animate-spin"></div>
+                              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                               <span>Listen</span>
                             </>
                           ) : (
@@ -1277,10 +1199,10 @@ const Dashboard = () => {
                         </button>
                       </td>
 
-                      <td className="px-4 py-4 text-center whitespace-nowrap">
+                      <td className="px-4 py-2 text-center whitespace-nowrap">
                         <button
                           onClick={() => handleOpenModal(row)}
-                          className="px-4 py-2 cursor-pointer text-sm font-medium bg-[#3F3EED] text-white rounded-lg hover:scale-105 transition"
+                          className="px-4 py-2 cursor-pointer text-sm font-medium bg-blue-500 text-white rounded-lg hover:scale-105 transition"
                         >
                           Details
                         </button>
@@ -1292,17 +1214,19 @@ const Dashboard = () => {
             </table>
           </div>
         </div>
-        <div className="flex justify-between items-center mt-6">
+
+        {/* Table Pagination */}
+        <div className="flex justify-between items-center mt-7">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer "
+            className="px-4 py-2 bg-gray-600 text-white hover:bg-gray-400 rounded-lg disabled:opacity-50 cursor-pointer "
           >
             Previous
           </button>
 
           <span className="text-sm text-gray-600">
-            Page {currentPage} of {totalPages}
+            Page {currentPage} of <span className="space-x-1.5">{totalPages}</span>
           </span>
 
           <button
@@ -1310,7 +1234,7 @@ const Dashboard = () => {
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-gray-600 text-white hover:bg-gray-400 rounded-lg disabled:opacity-50 cursor-pointer"
           >
             Next
           </button>

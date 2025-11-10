@@ -252,7 +252,7 @@ const Sidebar = () => {
                 onClick={() => setOpen(false)}
               >
                 {isActive && (
-                  <div className="absolute left-0 top-0 w-1 h-full bg-[#3F3EED] rounded-r"></div>
+                  <div className="absolute left-0 top-0 w-1 h-full bg-white rounded-r"></div>
                 )}
                 {item.label}
               </Link>
