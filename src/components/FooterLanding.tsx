@@ -105,9 +105,10 @@ function FooterLanding() {
                     {/* Bottom */}
                     <div className="border-t border-gray-200 mt-10 pt-6">
                         <p className="text-center text-sm text-white">
-                            ©2025 | All rights reserved by Paul.ai AI
+                            ©{new Date().getFullYear()} | All rights reserved by Paul.ai AI
                         </p>
                     </div>
+
                 </div>
             </footer>
         </>

@@ -698,53 +698,6 @@ function CallForm() {
     fetchPrompt();
   }, [token, setValue]);
 
-  // ✅ Status check function
-  //   const handlePoll = async (id: string) => {
-  //     if (!token) return;
-  //     try {
-  //       const res = await checkCallStatus(id, token);
-
-  //       dispatch(setTranscript(res));
-  //     } catch (err) {
-  //       console.error("Polling failed", err);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     let interval: NodeJS.Timeout;
-  //     if (openPopup && callId) {
-  //       interval = setInterval(() => {
-  //         handlePoll(callId);
-  //       }, 3000);
-  //     }
-  //     return () => {
-  //       if (interval) clearInterval(interval);
-  //     };
-  //   }, [openPopup, callId, token]);
-
-  //   const onSubmit = async (data: CallFormInputs) => {
-  //     console.log(data, "FORM DATA");
-  //     try {
-  //       const response = await fetch(`${backendUrl}api/assistant-initiate-call`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data),
-  //       });
-
-  //       if (!response.ok) throw new Error("Failed to initiate call");
-
-  //       const res = await response.json();
-  //       localStorage.setItem("lastCallId", res.call_id);
-  //       localStorage.setItem("callerEmail", data.caller_email);
-
-  //       navigate("/call-details");
-  //     } catch (err) {
-  //       console.error(err);
-  //       alert("Failed to initiate call. Please try again.");
-  //     }
-  //   };
 
   return (
     <>
@@ -803,30 +756,6 @@ function CallForm() {
 
           {/* Phone Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-            {/* <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Your Phone Number
-              </label>
-              <input
-                type="tel"
-                {...register("caller_number", {
-                  required: "Caller number is required",
-                  pattern: {
-                    value: /^\+?[1-9]\d{1,14}$/,
-                    message: "Enter a valid phone number",
-                  },
-                })}
-                className={`w-full px-4 py-2 border rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-[#3F3EED]  ${
-                  errors.caller_number ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="+1234567890"
-              />
-              {errors.caller_number && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.caller_number.message}
-                </p>
-              )}
-            </div> */}
 
             <div>
               <label className="block text-sm font-semibold text-black mb-1">
@@ -882,38 +811,11 @@ function CallForm() {
             )}
           </div>
 
-          {/* Objective */}
-          {/* <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Call Objective
-            </label>
-            <input
-              type="text"
-              {...register("objective", { required: "Objective is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-[#3F3EED]  ${
-                errors.objective ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Schedule a meeting"
-            />
-            {errors.objective && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.objective.message}
-              </p>
-            )}
-          </div> */}
-
           {/* Context */}
           <div>
             <label className="block text-sm font-semibold text-black mb-1">
               Call Context
             </label>
-            {/* <textarea
-              {...register("context", { required: "Context is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-[#3F3EED]  ${
-                errors.context ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="Provide any additional context for the call..."
-            ></textarea> */}
             <textarea
               {...register("context", { required: "Context is required" })}
               disabled={loadingPrompt} // ✅ disable while loading
@@ -960,122 +862,127 @@ function CallForm() {
         </form>
       </div>
       {/* ==== Popup ==== */}
-      {openPopup && (
-        <div
-          className="fixed inset-0  flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm"
-          onClick={() => dispatch(togglePopup(false))}
-        >
-          <div
-            className="bg-white rounded-lg shadow-lg w-[95%] sm:w-[75%] md:w-[50%] text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-3xl text-blue-900 text-center font-bold mb-4 p-5">Call Initiated</h2>
-            <div className="flex flex-wrap items-center mb-4 px-6">
-              <span className="font-medium">Call ID:</span>
-              <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
-                {callId}
-              </span>
-            </div>
-            {/* Transcript Box */}
-            {/* <div className="flex justify-between border border-purple-200 bg-purple-50 px-6 p-2">
-              <p className="text-base font-semibold text-[#391f52] text-start mb-1 ">
-                Call Transcript
-              </p>
-              <p className="text-base">
-                <span className="font-bold">Status:</span>{" "}
-                {status ?? "Pending..."}
-              </p>
-            </div> */}
-            <div className="rounded-lg">
-              {/* Caller Section */}
-              <div className="flex flex-col items-center justify-center py-5">
-                {/* Animated Circle */}
-                <div className="relative">
-                  {/* Outer Animated Pulse */}
-                  <span className="absolute inset-0 rounded-full bg-blue-900 opacity-60 animate-ping"></span>
 
-                  {/* Inner Static Circle */}
-                  <div className="w-20 h-20 rounded-full bg-blue-900 flex items-center justify-center shadow-md relative overflow-hidden">
-                    <IoCall color="white" size={30} />
-                  </div>
-                </div>
 
-                {/* Status Below */}
-                <p className="mt-6 text-lg font-medium text-blue-900 animate-pulse">
-                  {status ?? "Connecting..."}
-                </p>
-              </div>
-            </div>
 
-            {/* <div className="p-6 max-h-96 overflow-y-auto border-t border-blue-200 bg-blue-50 "> */}
-            <div className="text-gray-700 leading-relaxed">
-              {/* {Array.isArray(transcript) && transcript.length > 0 ? (
-                  <ul className="space-y-2"> */}
-              {/* {transcript.map((line, idx) => (
-                      <li key={idx} className="text-sm">
-                        {typeof line === "object" ? (
-                          <>
-                            <span className="font-semibold text-[#391f52]">
-                              {line.role}:
-                            </span>{" "}
-                            {line.text}
-                          </>
-                        ) : (
-                          <span>{line}</span>
-                        )}
-                      </li>
-                    ))} */}
-              {/* {Array.isArray(transcript) && transcript.length > 0 ? (
-                      <div className="space-y-1">
-                        {transcript.map((line, idx) => (
-                          <p key={idx} className="text-sm">
-                            <span className="font-semibold text-[#391f52]">
-                              {line.role}:
-                            </span>{" "}
-                            {line.text}
-                          </p>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 text-sm">
-                        No transcript yet...
-                      </p>
-                    )}
-                  </ul>
-                ) : (
-                  <p className="text-gray-500 text-sm">No transcript yet...</p>
-                )} */}
-            </div>
-            {/* </div> */}
 
-            {/* <div className="flex-1 overflow-y-auto border rounded-md p-3 mb-4 bg-gray-50 text-left">
-              {transcript.length === 0 ? (
-                <p className="text-gray-500 text-sm">No transcript yet...</p>
-              ) : (
-                transcript.map((line, idx) => (
-                  <p key={idx} className="text-sm mb-1">
-                    {line}
-                  </p>
-                ))
-              )}
-            </div> */}
-            <div className="p-6 border-t border-[#d1d5dc] flex justify-center">
-              <button
-                onClick={() => callId && handlePoll(callId)}
-                className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-blue-900 text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
-              >
-                Check Status Now
-              </button>
-              <button
-                onClick={() => dispatch(togglePopup(false))}
-                className="ml-4 px-6 py-2 bg-white border border-blue-900 text-blue-900 text-base font-semibold rounded-lg cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
+
+      {
+        openPopup && (
+
+          // <div
+          //   className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-md"
+          //   onClick={() => dispatch(togglePopup(false))}
+          // >
+          //   <div
+          //     className="relative bg-gradient-to-br from-[#ffffff10] to-[#e9f0ff40] border border-blue-300/40 rounded-2xl shadow-2xl w-[90%] sm:w-[70%] md:w-[45%] text-center p-6 backdrop-blur-lg"
+          //     onClick={(e) => e.stopPropagation()}
+          //   >
+          //     <div className="absolute inset-0 rounded-2xl border border-blue-400/30 animate-[pulseBorder_3s_ease-in-out_infinite] pointer-events-none"></div>
+
+          //     <h2 className="text-3xl font-bold text-blue-900 mb-6 tracking-wide">
+          //       Call Initiated
+          //     </h2>
+
+          //     <div className="flex flex-wrap items-center justify-center mb-6 text-gray-800">
+          //       <span className="font-medium">Call ID:</span>
+          //       <span className="ml-3 text-blue-700 font-semibold">{callId}</span>
+          //     </div>
+
+          //     <div className="flex flex-col items-center justify-center">
+          //       <div className="relative w-28 h-28 flex items-center justify-center">
+          //         <div className="absolute w-full h-full rounded-full border-4 border-blue-400/30 animate-spin-slow"></div>
+          //         <div className="absolute w-[80%] h-[80%] rounded-full border-4 border-blue-500/50 animate-spin-reverse"></div>
+
+          //         <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center shadow-[0_0_30px_#3b82f6aa] animate-pulse">
+          //           <IoCall color="white" size={36} className="animate-bounce" />
+          //         </div>
+          //       </div>
+
+          //       <p className="mt-6 text-lg font-semibold text-blue-900 animate-pulse">
+          //         {status ?? "Connecting..."}
+          //       </p>
+          //     </div>
+
+          //     <div className="mt-8 border-t border-blue-200/50 pt-6 flex justify-center space-x-4">
+          //       <button
+          //         onClick={() => callId && handlePoll(callId)}
+          //         className="px-6 py-2 bg-gradient-to-r from-blue-700 to-blue-900 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
+          //       >
+          //         Check Status Now
+          //       </button>
+          //       <button
+          //         onClick={() => dispatch(togglePopup(false))}
+          //         className="px-6 py-2 border border-blue-900 text-blue-900 rounded-lg hover:bg-blue-50 transition-all duration-300"
+          //       >
+          //         Close
+          //       </button>
+          //     </div>
+          //   </div >
+          // </div >
+
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm" onClick={() => dispatch(togglePopup(false))} > <div className="bg-white rounded-lg shadow-lg w-[95%] sm:w-[75%] md:w-[50%] text-center" onClick={(e) => e.stopPropagation()} > <h2 className="text-3xl text-blue-900 text-center font-bold mb-4 p-5">Call Initiated</h2> <div className="flex flex-wrap items-center mb-4 px-6"> <span className="font-medium">Call ID:</span> <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg"> {callId} </span> </div> <div className="rounded-lg"> {/* Caller Section */} <div className="flex flex-col items-center justify-center py-5"> {/* Animated Circle */} <div className="relative"> {/* Outer Animated Pulse */} <span className="absolute inset-0 rounded-full bg-blue-900 opacity-60 animate-ping"></span> {/* Inner Static Circle */} <div className="w-20 h-20 rounded-full bg-blue-900 flex items-center justify-center shadow-md relative overflow-hidden"> <IoCall color="white" size={30} /> </div> </div> {/* Status Below */} <p className="mt-6 text-lg font-medium text-blue-900 animate-pulse"> {status ?? "Connecting..."} </p> </div> </div> {/* <div className="p-6 max-h-96 overflow-y-auto border-t border-blue-200 bg-blue-50 "> */} <div className="text-gray-700 leading-relaxed"> </div> <div className="p-6 border-t border-[#d1d5dc] flex justify-center"> <button onClick={() => callId && handlePoll(callId)} className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-blue-900 text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg" > Check Status Now </button> <button onClick={() => dispatch(togglePopup(false))} className="ml-4 px-6 py-2 bg-white border border-blue-900 text-blue-900 text-base font-semibold rounded-lg cursor-pointer" > Close </button> </div> </div> </div>
+
+          // <div
+          //   className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 backdrop-blur-md"
+          //   onClick={() => dispatch(togglePopup(false))}
+          // >
+          //   <div
+          //     className="relative bg-gradient-to-br from-[#ffffff10] to-[#e9f0ff40] border border-blue-300/40 rounded-2xl shadow-2xl w-[90%] sm:w-[70%] md:w-[45%] text-center p-6 backdrop-blur-lg"
+          //     onClick={(e) => e.stopPropagation()}
+          //   >
+          //     {/* Glowing border animation */}
+          //     <div className="absolute inset-0 rounded-2xl border border-blue-400/30 animate-[pulseBorder_3s_ease-in-out_infinite] pointer-events-none"></div>
+
+          //     <h2 className="text-3xl font-bold text-blue-900 mb-6 tracking-wide">
+          //       Call Initiated
+          //     </h2>
+
+          //     <div className="flex flex-wrap items-center mb-6 text-black">
+          //       <span className="font-medium">Call ID:</span>
+          //       <span className="ml-3 text-black font-semibold">{callId}</span>
+          //     </div>
+
+          //     {/* Animated phone section */}
+          //     <div className="flex flex-col items-center justify-center">
+          //       <div className="relative w-28 h-28 flex items-center justify-center">
+          //         {/* Rotating ring glow */}
+          //         <div className="absolute w-full h-full rounded-full border-4 border-blue-400/30 animate-spin-slow"></div>
+          //         <div className="absolute w-[80%] h-[80%] rounded-full border-4 border-blue-500/50 animate-spin-reverse"></div>
+
+          //         {/* Pulsing inner circle */}
+          //         <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-900 to-blue-700 flex items-center justify-center shadow-[0_0_30px_#3b82f6aa] animate-pulse">
+          //           <IoCall color="white" size={36} className="animate-bounce mt-2" />
+          //         </div>
+          //       </div>
+
+          //       {/* Connecting text */}
+          //       <p className="mt-6 text-lg font-semibold text-blue-900 animate-pulse">
+          //         {status ?? "Connecting..."}
+          //       </p>
+          //     </div>
+
+          //     {/* Buttons */}
+          //     <div className="mt-8 border-t border-gray-200/50 pt-6 flex justify-center space-x-4">
+          //       <button
+          //         onClick={() => callId && handlePoll(callId)}
+          //         className="px-6 py-2 bg-gradient-to-r from-blue-700 to-blue-900 text-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
+          //       >
+          //         Check Status Now
+          //       </button>
+          //       <button
+          //         onClick={() => dispatch(togglePopup(false))}
+          //         className="px-6 py-2 border border-blue-900 text-blue-900 rounded-lg hover:bg-blue-50 transition-all duration-300 cursor-pointer"
+          //       >
+          //         Close
+          //       </button>
+          //     </div>
+          //   </div>
+          // </div>
+
+        )
+      }
     </>
   );
 }

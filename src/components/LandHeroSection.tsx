@@ -19,7 +19,7 @@ function LandHeroSection() {
             <Header />
 
             {/* HERO CONTENT */}
-            < div className="relative container mx-auto h-full px-3 sm:px-4 flex flex-col justify-center items-center text-center text-white tracking-[1px]" >
+            < div className="relative container mx-auto h-full min-h-[inherit] px-3 sm:px-4 flex flex-col justify-center items-center text-center text-white tracking-[1px]" >
                 <p className="px-3 sm:px-4 py-2 mb-4 text-[10px] sm:text-xs border border-white rounded-full inline-block">
                     Paul.ai - The AI Agent That Transforms Your Calling Experience
                 </p>
