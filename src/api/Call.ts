@@ -61,8 +61,6 @@ export const getSystemPrompt = async (token: string) => {
   return response.data;
 };
 
-
-
 // ✅ POST: Upload Excel File
 export const uploadContactsFile = async (file: File, token: string) => {
   const formData = new FormData();
@@ -83,8 +81,6 @@ export const uploadContactsFile = async (file: File, token: string) => {
 
   return response.data;
 };
-
-
 
 // GET contacts for CallForm autocomplete
 export const getContacts = async (token: string) => {
