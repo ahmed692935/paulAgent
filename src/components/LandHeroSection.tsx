@@ -1,7 +1,9 @@
 import Header from "../components/HeaderLanding";
 import heroVideo from "../assets/Videos/herobg.mp4";
+import { useNavigate } from "react-router-dom";
 
 function LandHeroSection() {
+  const navigate = useNavigate();
   return (
     <section className="relative w-full min-h-[40rem] md:h-[100vh] overflow-hidden bg-gradient-to-r from-blue-900 to-blue-500">
       {/* Background Video */}
@@ -42,11 +44,17 @@ function LandHeroSection() {
         </p>
 
         <div className="mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 items-center">
-          <button className="bg-[#13243C] text-white text-sm sm:text-base font-semibold px-5 sm:px-8 py-2 sm:py-3 rounded-md shadow-lg border border-2 border-blue-900 hover:bg-white hover:text-blue-900 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer w-[85%] sm:w-auto w-fit">
+          <button
+            onClick={() => navigate("/call")}
+            className="bg-[#13243C] text-white text-sm sm:text-base font-semibold px-5 sm:px-8 py-2 sm:py-3 rounded-md shadow-lg border border-2 border-blue-900 hover:bg-white hover:text-blue-900 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer w-[85%] sm:w-auto w-fit"
+          >
             Try It Now For Free
           </button>
 
-          <button className="bg-white text-blue-900 text-sm sm:text-base font-semibold px-5 sm:px-8 py-2 sm:py-3 rounded-md shadow-lg border border-2 border-blue-900 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer w-[85%] sm:w-auto">
+          <button
+            onClick={() => navigate("/call")}
+            className="bg-white text-blue-900 text-sm sm:text-base font-semibold px-5 sm:px-8 py-2 sm:py-3 rounded-md shadow-lg border border-2 border-blue-900 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer w-[85%] sm:w-auto"
+          >
             Book a Demo
           </button>
         </div>

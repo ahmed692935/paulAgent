@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 function ThreeSteps() {
+  const navigate = useNavigate();
   const steps = [
     {
       title: "Assign a Task",
@@ -52,8 +55,11 @@ function ThreeSteps() {
       <p className="text-center text-gray-800 mt-8 text-sm md:text-base">
         It’s that simple!
       </p>
-      <button className="text-[#13243C] text-base font-semibold bg-white px-6 py-3 rounded-md border border-2 border-[#13243C] hover:bg-[#13243C] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer mt-6">
-        <span>Try QCall.ai Today</span>
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="text-[#13243C] text-base font-semibold bg-white px-6 py-3 rounded-md border border-2 border-[#13243C] hover:bg-[#13243C] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer mt-6"
+      >
+        <span>Try Paul.ai Today</span>
       </button>
     </section>
   );

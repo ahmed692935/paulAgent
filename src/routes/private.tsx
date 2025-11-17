@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }: Props) => {
   const user = useSelector((state: RootState) => state.auth.user);
 
   if (!user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/signin" replace />;
   }
 
   // return children;
