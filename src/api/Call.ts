@@ -86,7 +86,7 @@ export const uploadContactsFile = async (file: File, token: string) => {
 export const getContacts = async (token: string) => {
   const response = await axiosInstance.get(`${API_URL}/contacts`, {
     headers: {
-      "ngrok-skip-browser-warning": "true",
+      "ngrok-skip-browser-warning": "true ",
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
     },
