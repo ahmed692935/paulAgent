@@ -233,7 +233,7 @@
 //         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
 //           {/* Total Calls */}
 //           <div
-//             className="bg-white rounded-xl shadow-lg border border-blue-200 p-6 flex items-center justify-between 
+//             className="bg-white rounded-xl shadow-lg border border-blue-200 p-6 flex items-center justify-between
 //                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl animate-fadeInUp"
 //           >
 //             <div>
@@ -251,7 +251,7 @@
 
 //           {/* Successful Calls */}
 //           <div
-//             className="bg-white rounded-xl shadow-lg border border-green-200 p-6 flex items-center justify-between 
+//             className="bg-white rounded-xl shadow-lg border border-green-200 p-6 flex items-center justify-between
 //                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl animate-fadeInUp delay-100"
 //           >
 //             <div>
@@ -269,7 +269,7 @@
 
 //           {/* Failed Calls */}
 //           <div
-//             className="bg-white rounded-xl shadow-lg border border-red-200 p-6 flex items-center justify-between 
+//             className="bg-white rounded-xl shadow-lg border border-red-200 p-6 flex items-center justify-between
 //                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl animate-fadeInUp delay-200"
 //           >
 //             <div>
@@ -471,7 +471,7 @@
 //                         <button
 //                           onClick={() => handleListenRecording(row.call_id)}
 //                           disabled={loadingRecordings === row.call_id}
-//                           className={`flex items-center gap-2 text-[#3F3EED] underline cursor-pointer 
+//                           className={`flex items-center gap-2 text-[#3F3EED] underline cursor-pointer
 //       ${
 //         loadingRecordings === row.call_id
 //           ? "opacity-60 pointer-events-none"
@@ -742,18 +742,12 @@
 
 // export default Dashboard;
 
-
-
-
-
-
-
 // My code
 
 import { useEffect, useState } from "react";
 import type { RowData } from "../interfaces/dashboard";
 // import { FiCheckCircle, FiPhone, FiXCircle } from "react-icons/fi";
-import { Phone, CircleCheckBig, PhoneMissed } from 'lucide-react';
+import { Phone, CircleCheckBig, PhoneMissed } from "lucide-react";
 
 import {
   PieChart,
@@ -762,7 +756,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts"
+} from "recharts";
 
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
@@ -986,7 +980,9 @@ const Dashboard = () => {
       <div className=" py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-blue-900 mb-2"> {/*text-[#3F3EED]*/}
+          <h1 className="text-4xl font-bold text-[#13243C] mb-2">
+            {" "}
+            {/*text-[#3F3EED]*/}
             Analytics Dashboard
           </h1>
           <p className="text-black">Monitor and analyze agent interactions</p>
@@ -1000,7 +996,9 @@ const Dashboard = () => {
                   transform transition-all duration-500 hover:scale-105 hover:shadow-2xl animate-fadeInUp"
           >
             <div>
-              <h3 className="text-lg text-blue-900 font-semibold "> {/*text-[#391f52]*/}
+              <h3 className="text-lg text-[#13243C] font-semibold ">
+                {" "}
+                {/*text-[#391f52]*/}
                 Total Calls
               </h3>
               <p className="text-3xl font-bold text-gray-800 mt-1">
@@ -1009,9 +1007,7 @@ const Dashboard = () => {
             </div>
             <div className="">
               {/* <FiPhone size={28} /> */}
-              <Phone size={30}
-                className="text-blue-900"
-              />
+              <Phone size={30} className="text-[#13243C]" />
             </div>
           </div>
 
@@ -1030,9 +1026,7 @@ const Dashboard = () => {
             </div>
             <div className="">
               {/* <FiCheckCircle size={24} /> */}
-              <CircleCheckBig size={30}
-                className="text-green-600"
-              />
+              <CircleCheckBig size={30} className="text-green-600" />
             </div>
           </div>
 
@@ -1049,16 +1043,16 @@ const Dashboard = () => {
             </div>
             <div className="">
               {/* <FiXCircle size={24} /> */}
-              <PhoneMissed size={30}
-                className="text-red-600"
-              />
+              <PhoneMissed size={30} className="text-red-600" />
             </div>
           </div>
         </div>
 
         {/* Graph Section */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 my-5">
-          <h3 className="text-2xl font-bold text-blue-900 mb-4"> {/*text-[#3F3EED]*/}
+          <h3 className="text-2xl font-bold text-[#13243C] mb-4">
+            {" "}
+            {/*text-[#3F3EED]*/}
             Call Status Distribution
           </h3>
 
@@ -1076,7 +1070,7 @@ const Dashboard = () => {
                 outerRadius={100}
                 label
               >
-                <Cell fill="#1c398e" /> {/* Dark blue for success */}
+                <Cell fill="#13243C" /> {/* Dark blue for success */}
                 <Cell fill="#2b7fff" /> {/* Light blue for failed */}
               </Pie>
               <Tooltip />
@@ -1085,15 +1079,13 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-
-
         {/* Table Container */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden dash_call_table">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 {/* <tr className="bg-[#391f52] to-purple-700 border-b border-purple-500"> */}
-                <tr className="bg-blue-900 border-b border-blue-500">
+                <tr className="bg-[#13243C] border-b border-blue-500">
                   <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
                     User Info
                   </th>
@@ -1138,8 +1130,9 @@ const Dashboard = () => {
                   calls?.map((row, index) => (
                     <tr
                       key={row.id}
-                      className={`relative bg-white hover:bg-blue-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-blue-25" : "bg-white "
-                        }`}
+                      className={`relative bg-white hover:bg-blue-50 transition-colors duration-200 ${
+                        index % 2 === 0 ? "bg-blue-25" : "bg-white "
+                      }`}
                     >
                       <td className="px-4 py-2 text-gray-800 whitespace-nowrap">
                         {row.username}
@@ -1155,19 +1148,22 @@ const Dashboard = () => {
                       <td className="px-4 py-2 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 rounded-full font-semibold
-                    ${row.status === "completed" || row.status === "connected"
-                              ? "bg-green-100 text-green-800"
-                              : ""
-                            }
-                    ${row.status === "not_attended" ||
-                              row.status === "unanswered"
-                              ? "bg-gray-200 text-gray-800"
-                              : ""
-                            }
-                    ${row.status === "no-answer" || row.status === "busy"
-                              ? "bg-red-100 text-red-800"
-                              : ""
-                            }
+                    ${
+                      row.status === "completed" || row.status === "connected"
+                        ? "bg-green-100 text-green-800"
+                        : ""
+                    }
+                    ${
+                      row.status === "not_attended" ||
+                      row.status === "unanswered"
+                        ? "bg-gray-200 text-gray-800"
+                        : ""
+                    }
+                    ${
+                      row.status === "no-answer" || row.status === "busy"
+                        ? "bg-red-100 text-red-800"
+                        : ""
+                    }
                     ${row.status === "busy" ? "bg-red-100 text-red-800" : ""}`}
                         >
                           {row.status}
@@ -1182,15 +1178,16 @@ const Dashboard = () => {
                         <button
                           onClick={() => handleListenRecording(row.call_id)}
                           disabled={loadingRecordings === row.call_id}
-                          className={`flex items-center gap-2 text-blue-500 underline cursor-pointer 
-      ${loadingRecordings === row.call_id
-                              ? "opacity-60 pointer-events-none"
-                              : "hover:text-blue-700"
-                            }`}
+                          className={`flex items-center gap-2 text-[#13243C] underline cursor-pointer 
+      ${
+        loadingRecordings === row.call_id
+          ? "opacity-60 pointer-events-none"
+          : "hover:text-[#13243C]"
+      }`}
                         >
                           {loadingRecordings === row.call_id ? (
                             <>
-                              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                              <div className="w-4 h-4 border-2 border-[#13243C] border-t-transparent rounded-full animate-spin"></div>
                               <span>Listen</span>
                             </>
                           ) : (
@@ -1202,7 +1199,7 @@ const Dashboard = () => {
                       <td className="px-4 py-2 text-center whitespace-nowrap">
                         <button
                           onClick={() => handleOpenModal(row)}
-                          className="px-4 py-2 cursor-pointer text-sm font-medium bg-blue-900 text-white rounded-lg hover:scale-105 transition"
+                          className="px-4 py-2 cursor-pointer text-sm font-medium bg-[#13243C] text-white rounded-lg hover:scale-105 transition"
                         >
                           Details
                         </button>
@@ -1226,7 +1223,8 @@ const Dashboard = () => {
           </button>
 
           <span className="text-sm text-gray-600">
-            Page {currentPage} of <span className="space-x-1.5">{totalPages}</span>
+            Page {currentPage} of{" "}
+            <span className="space-x-1.5">{totalPages}</span>
           </span>
 
           <button
@@ -1254,7 +1252,7 @@ const Dashboard = () => {
           <div className="relative bg-white w-full max-w-2xl rounded-xl border border-blue-200 shadow-2xl overflow-hidden">
             {/* Modal Header */}
             {/* <div className="p-6 border-b border-blue-200 bg-gradient-to-b from-[#6d0f78] to-[#0a0f2d]"> */}
-            <div className="p-6 border-b border-blue-200 bg-gradient-to-r from-[#2A1EB3] via-[#3F3EED] to-[#7C78FF]">
+            <div className="p-6 border-b border-blue-200 bg-[#13243C]">
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-xl font-bold text-white mb-2">
@@ -1329,15 +1327,16 @@ const Dashboard = () => {
             {/* Tab Navigation */}
             <div className="flex border-b border-blue-200 bg-blue-50">
               <button
-                className={`px-6 py-4 text-sm font-medium transition-all duration-200 relative ${activeTab === "transcription"
-                  ? "text-[#3F3EED] bg-white"
-                  : "text-blue-900 hover:text-blue-700 hover:bg-blue-100"
-                  }`}
+                className={`px-6 py-4 text-sm font-medium transition-all duration-200 relative ${
+                  activeTab === "transcription"
+                    ? "text-[#13243C] bg-white"
+                    : "text-[#13243C] hover:text-blue-700 hover:bg-blue-100"
+                }`}
                 onClick={() => setActiveTab("transcription")}
               >
                 Transcription
                 {activeTab === "transcription" && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3F3EED]"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#13243C]"></div>
                 )}
               </button>
               {/* <button
@@ -1360,7 +1359,7 @@ const Dashboard = () => {
               <div className="text-gray-700 leading-relaxed">
                 {activeTab === "transcription" ? (
                   <div>
-                    <h4 className="text-[#3F3EED] font-semibold mb-3">
+                    <h4 className="text-[#13243C] font-semibold mb-3">
                       Call Transcription
                     </h4>
                     {/* <p className="text-gray-600">{selectedRow.transcription}</p> */}
@@ -1401,8 +1400,8 @@ const Dashboard = () => {
                       </p>
                     )} */}
                     {selectedRow.transcript &&
-                      Array.isArray(selectedRow.transcript.items) &&
-                      selectedRow.transcript.items.length > 0 ? (
+                    Array.isArray(selectedRow.transcript.items) &&
+                    selectedRow.transcript.items.length > 0 ? (
                       <ul className="space-y-2">
                         {selectedRow.transcript.items.map((item, idx) => (
                           <li key={idx} className="text-sm">
@@ -1439,7 +1438,7 @@ const Dashboard = () => {
             <div className="p-6 border-t border-blue-200 bg-blue-50 flex justify-center">
               <button
                 onClick={handleCloseModal}
-                className="w-full cursor-pointer sm:w-auto px-6 py-2 bg-[#3F3EED] text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 font-medium shadow-lg"
+                className="w-full cursor-pointer sm:w-auto px-6 py-2 bg-[#13243C] text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 font-medium shadow-lg"
               >
                 Close
               </button>

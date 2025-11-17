@@ -1,31 +1,33 @@
-import { lazy } from "react"
-import HeroSection from "../components/LandHeroSection"
+import { lazy } from "react";
+import HeroSection from "../components/LandHeroSection";
 
-const BannerLand = lazy(() => import("../components/BannerLand"))
-const CallAction = lazy(() => import("../LandingPageCards/CallAction"))
-const UseCases = lazy(() => import("../LandingPageCards/UseCases"))
-const KeyBenefit = lazy(() => import("../LandingPageCards/KeyBenefits"))
-const ThreeStep = lazy(() => import("../LandingPageCards/ThreeSteps"))
+const BannerLand = lazy(() => import("../components/BannerLand"));
+const CallAction = lazy(() => import("../LandingPageCards/CallAction"));
+const UseCases = lazy(() => import("../LandingPageCards/UseCases"));
+const KeyBenefit = lazy(() => import("../LandingPageCards/KeyBenefits"));
+const ThreeStep = lazy(() => import("../LandingPageCards/ThreeSteps"));
 const FooterLand = lazy(() => import("../components/FooterLanding"));
 
-
 function LandingPage() {
-
-
   return (
     <>
-
-      <HeroSection />
+      <div id="home">
+        <HeroSection />
+      </div>
       <BannerLand />
-      <CallAction />
-      <UseCases />
+      <div id="about">
+        <CallAction />
+      </div>
+      <div id="services">
+        <UseCases />
+      </div>
       <KeyBenefit />
       <ThreeStep />
-      <FooterLand />
+      <div id="contact">
+        <FooterLand />
+      </div>
     </>
   );
 }
-
-
 
 export default LandingPage;

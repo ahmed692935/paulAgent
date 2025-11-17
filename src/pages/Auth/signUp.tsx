@@ -55,7 +55,7 @@ const SignUp: React.FC = () => {
       >
         {/* Header */}
         <div className="flex justify-center mb-2 mt-5">
-          <div className="text-blue-900 font-base font-bold">
+          <div className="text-[#13243C] font-base font-bold">
             Start your Journey
           </div>
         </div>
@@ -90,9 +90,7 @@ const SignUp: React.FC = () => {
             className="w-full px-4 py-2 mb-1 border border-gray-300 mt-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-900 placeholder-gray-300"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mb-3">
-              {errors.email.message}
-            </p>
+            <p className="text-red-500 text-sm mb-3">{errors.email.message}</p>
           )}
         </label>
 
@@ -116,10 +114,11 @@ const SignUp: React.FC = () => {
         <button
           type="submit"
           disabled={signupLoading}
-          className={`w-full cursor-pointer flex items-center justify-center gap-2 text-white py-2 rounded-lg transition-all ${signupLoading
-            ? "bg-blue-900 opacity-70 cursor-not-allowed"
-            : "bg-blue-900 hover:opacity-90"
-            }`}
+          className={`w-full cursor-pointer flex items-center justify-center gap-2 text-white py-2 rounded-lg transition-all ${
+            signupLoading
+              ? "bg-[#13243C] opacity-70 cursor-not-allowed"
+              : "bg-[#13243C] hover:opacity-90"
+          }`}
         >
           {signupLoading ? (
             <span className="flex items-center gap-2">
@@ -154,7 +153,7 @@ const SignUp: React.FC = () => {
         <p className="mt-4 text-sm text-gray-500">
           Already have an account?{" "}
           <button
-            className="text-[#3F3EED] cursor-pointer hover:underline"
+            className="text-[#13243C] cursor-pointer hover:underline"
             onClick={handleNavigate}
           >
             Sign in now

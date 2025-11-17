@@ -53,8 +53,8 @@ const SignIn: React.FC = () => {
   };
 
   const loginNavigate = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center gradient-rotate">
@@ -71,7 +71,7 @@ const SignIn: React.FC = () => {
           {/* <div className="bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] p-2 rounded-lg shadow-lg">
             <FiDownload className="text-white text-4xl rotate-270" />
           </div> */}
-          <div className="text-blue-900 text-base font-bold">Welcome Back</div>
+          <div className="text-[#13243C] text-base font-bold">Welcome Back</div>
         </div>
 
         {/* Title */}
@@ -128,8 +128,9 @@ const SignIn: React.FC = () => {
           disabled={loginLoading}
           onClick={loginNavigate}
           // className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] text-white py-2 rounded-lg transition-all cursor-pointer ${
-          className={`w-full flex items-center justify-center gap-2 bg-blue-900 hover:opacity-90 text-white py-2 rounded-lg transition-all cursor-pointer ${loginLoading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+          className={`w-full flex items-center justify-center gap-2 bg-[#13243C] hover:opacity-90 text-white py-2 rounded-lg transition-all cursor-pointer ${
+            loginLoading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
           {loginLoading ? (
             <>
@@ -168,7 +169,7 @@ const SignIn: React.FC = () => {
           Don’t have an account?{" "}
           <button
             // className="text-green-600 cursor-pointer hover:underline"
-            className="text-[#3F3EED] cursor-pointer hover:underline"
+            className="text-[#13243C] cursor-pointer hover:underline"
             onClick={handleNavigate}
           >
             Sign up now
@@ -182,12 +183,6 @@ const SignIn: React.FC = () => {
 };
 
 export default SignIn;
-
-
-
-
-
-
 
 // MY CODE
 
