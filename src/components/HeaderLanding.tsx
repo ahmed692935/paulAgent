@@ -46,16 +46,14 @@ function HeaderLanding() {
     <>
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 w-full h-16 sm:h-20 z-50 transition-all duration-300 px-4 md:px-8 ${
-          isScrolled ? "bg-white shadow-md" : "bg-transparent"
-        }`}
+        className={`fixed top-0 left-0 w-full h-16 sm:h-20 z-50 transition-all duration-300 px-4 md:px-8 ${isScrolled ? "bg-white shadow-md" : "bg-transparent"
+          }`}
       >
         <div className="max-w-6xl mx-auto w-full h-full flex items-center justify-between">
           {/* Logo */}
           <h3
-            className={`text-xl sm:text-2xl font-bold transition-colors duration-200 ${
-              isScrolled ? "text-[#13243C]" : "text-white"
-            }`}
+            className={`text-xl sm:text-2xl font-bold transition-colors duration-200 ${isScrolled ? "text-[#13243C]" : "text-white"
+              }`}
           >
             Caller Dialing
           </h3>
@@ -66,11 +64,10 @@ function HeaderLanding() {
               <li
                 key={item.key}
                 onClick={() => handleScrollTo(item.id)}
-                className={`list-none cursor-pointer font-semibold transition-colors duration-200 text-base ${
-                  isScrolled
+                className={`list-none cursor-pointer font-semibold transition-colors duration-200 text-base ${isScrolled
                     ? "text-[#13243C] hover:text-blue-700"
                     : "text-white hover:text-[#13243C]"
-                }`}
+                  }`}
               >
                 {item.label}
               </li>
@@ -91,18 +88,16 @@ function HeaderLanding() {
                     {user.email.slice(0, 5)}...
                   </span> */}
                   <span
-                    className={`font-semibold ${
-                      isScrolled ? "text-[#13243C]" : "text-white"
-                    }`}
+                    className={`font-semibold ${isScrolled ? "text-[#13243C]" : "text-white"
+                      }`}
                   >
                     {user.email.slice(0, 5)}...
                   </span>
 
                   {/* <FaRegUserCircle className="text-white" size={24} /> */}
                   <FaRegUserCircle
-                    className={`${
-                      isScrolled ? "text-[#13243C]" : "text-white"
-                    }`}
+                    className={`${isScrolled ? "text-[#13243C]" : "text-white"
+                      }`}
                     size={24}
                   />
                   <FaChevronDown className="text-white" size={12} />
@@ -116,9 +111,8 @@ function HeaderLanding() {
                       {user.email}
                     </div> */}
                     <div
-                      className={`font-semibold ${
-                        isScrolled ? "text-[#13243C]" : "text-white"
-                      }`}
+                      className={`font-semibold ${isScrolled ? "text-[#13243C]" : "text-white"
+                        }`}
                     >
                       {user.email}
                     </div>
@@ -146,11 +140,10 @@ function HeaderLanding() {
                 <Link
                   to="/signup"
                   className={`h-9 sm:h-10 px-3 sm:px-5 text-sm sm:text-base rounded-md font-semibold flex items-center justify-center transition-all duration-300
-      ${
-        isScrolled
-          ? "bg-white text-[#13243C] border border-[#13243C] hover:bg-[#13243C] hover:text-white"
-          : "bg-white text-[#13243C] hover:bg-[#13243C] hover:text-white"
-      }`}
+      ${isScrolled
+                      ? "bg-white text-[#13243C] border border-[#13243C] hover:bg-[#13243C] hover:text-white"
+                      : "bg-white text-[#13243C] hover:bg-[#13243C] hover:text-white"
+                    }`}
                 >
                   Sign Up
                 </Link>
@@ -158,11 +151,10 @@ function HeaderLanding() {
                 <Link
                   to="/signin"
                   className={`h-9 sm:h-10 px-3 sm:px-5 text-sm sm:text-base rounded-md font-semibold flex items-center justify-center transition-all duration-300
-      ${
-        isScrolled
-          ? "bg-white text-[#13243C] border border-[#13243C] hover:bg-[#13243C] hover:text-white"
-          : "bg-white text-[#13243C] hover:bg-[#13243C] hover:text-white"
-      }`}
+      ${isScrolled
+                      ? "bg-white text-[#13243C] border border-[#13243C] hover:bg-[#13243C] hover:text-white"
+                      : "bg-white text-[#13243C] hover:bg-[#13243C] hover:text-white"
+                    }`}
                 >
                   Login
                 </Link>
@@ -173,9 +165,8 @@ function HeaderLanding() {
           {/* Mobile Hamburger */}
           <button
             onClick={() => setMenuOpen(true)}
-            className={`md:hidden text-3xl focus:outline-none transition-colors duration-300 cursor-pointer ${
-              isScrolled ? "text-[#13243C]" : "text-white"
-            }`}
+            className={`md:hidden text-3xl focus:outline-none transition-colors duration-300 cursor-pointer ${isScrolled ? "text-[#13243C]" : "text-white"
+              }`}
           >
             <Menu />
           </button>
@@ -183,9 +174,8 @@ function HeaderLanding() {
 
         {/* Mobile Slide Menu */}
         <div
-          className={`fixed top-0 right-0 h-full w-3/4 sm:w-2/3 bg-white shadow-lg z-50 transform transition-transform duration-500 ease-in-out ${
-            menuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`fixed top-0 right-0 h-full w-3/4 sm:w-2/3 bg-white shadow-lg z-50 transform transition-transform duration-500 ease-in-out ${menuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <button
             onClick={() => setMenuOpen(false)}

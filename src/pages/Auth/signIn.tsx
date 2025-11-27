@@ -25,6 +25,7 @@ const SignIn: React.FC = () => {
 
   const onSubmit: SubmitHandler<SignInData> = async (data: SignInData) => {
     console.log(data, "Data");
+    debugger;
     try {
       dispatch(loginStart());
       const response = await loginUser(data);
@@ -33,7 +34,6 @@ const SignIn: React.FC = () => {
       // ✅ Extract token + user from API response
       const token = response.access_token;
       const user = { ...response.user, access_token: token };
-
       dispatch(loginSuccess({ user, token }));
 
       toast.success("Sign-in successful!");
@@ -52,9 +52,9 @@ const SignIn: React.FC = () => {
     navigate("/signup");
   };
 
-  const loginNavigate = () => {
-    navigate("/");
-  };
+  // const loginNavigate = () => {
+  //   navigate("/");
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center gradient-rotate">
@@ -126,11 +126,10 @@ const SignIn: React.FC = () => {
         <button
           type="submit"
           disabled={loginLoading}
-          onClick={loginNavigate}
+          // onClick={loginNavigate}
           // className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] text-white py-2 rounded-lg transition-all cursor-pointer ${
-          className={`w-full flex items-center justify-center gap-2 bg-[#13243C] hover:opacity-90 text-white py-2 rounded-lg transition-all cursor-pointer ${
-            loginLoading ? "opacity-70 cursor-not-allowed" : ""
-          }`}
+          className={`w-full flex items-center justify-center gap-2 bg-[#13243C] hover:opacity-90 text-white py-2 rounded-lg transition-all cursor-pointer ${loginLoading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
         >
           {loginLoading ? (
             <>

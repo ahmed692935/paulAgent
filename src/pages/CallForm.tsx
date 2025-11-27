@@ -829,9 +829,8 @@ function CallForm() {
                   },
                 })}
                 className={`w-full px-4 hover:border-blue-900
- py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${
-   errors.caller_email ? "border-red-500" : "border-gray-300"
- }`}
+ py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
+                  }`}
                 placeholder="name@example.com"
               />
               {errors.caller_email && (
@@ -966,21 +965,22 @@ function CallForm() {
             </label>
             <select
               {...register("voice", { required: "Agent name is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${
-                errors.voice ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.voice ? "border-red-500" : "border-gray-300"
+                }`}
             >
               <option value="">Select Agent</option>
-              <option value="david">David - english (Male)</option>
-              <option value="ravi">Ravi - english (Male)</option>
-              <option value="emily-british">Emily - english (Female)</option>
-              <option value="alice-british">Alice - english (Female)</option>
-              <option value="julia-british">Julia - english (Female)</option>
-              <option value="julio">Julio - spanish (Male)</option>
-              <option value="donato">Donato - spanish (Male)</option>
-              <option value="helena-spanish">Helena - spanish (Female)</option>
-              <option value="rosa">Rosa - spanish (Female)</option>
-              <option value="mariam">Mariam - spanish (Female)</option>
+              <option value="sam-elliot">Sam Elliot - english (Male)</option>
+              <option value="peck">Peck - english (Male)</option>
+              <option value="king">King - english (Male)</option>
+              <option value="barry-white">Barry White - english (Male)</option>
+              <option value="smokey-burt">Smokey Burt - english (Male)</option>
+              <option value="dark-blues-singer">Dark Blues Singer - english (Male)</option>
+              <option value="matthew-schmitz">Matthew Schmitz - english (Male)</option>
+              <option value="wyatt">Wyatt - english (Male)</option>
+              <option value="southern-mike">Southern Mike - english (Male)</option>
+              <option value="serafina">Serafina - english (Female)</option>
+              <option value="paul">Paul - english (Male)</option>
+
             </select>
             {errors.voice && (
               <p className="text-red-500 text-xs mt-1">
@@ -1051,7 +1051,7 @@ function CallForm() {
               className="w-full px-4 py-2 border border-gray-300 hover:border-blue-900 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900"
             >
               <option value="en">English</option>
-              <option value="es">Spanish</option>
+              {/* <option value="es">Spanish</option> */}
             </select>
           </div>
 
