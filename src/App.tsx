@@ -10,6 +10,7 @@ import CallForm from "./pages/CallForm";
 import AddPrompt from "./pages/AddPrompt";
 import LandingPage from "./pages/LandingPage";
 import UploadCsv from "./pages/UploadCsv";
+import AgentVoice from "./pages/AgentVoice"
 
 function App() {
   return (
@@ -69,6 +70,14 @@ function App() {
             element={
               <PrivateRoute>
                 <CallForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/voice"
+            element={
+              <PrivateRoute>
+                <AgentVoice />
               </PrivateRoute>
             }
           />

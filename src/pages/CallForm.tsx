@@ -562,6 +562,8 @@ import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
+import { getAgentVoice } from "../api/Voice";
+
 function CallForm() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
@@ -787,6 +789,27 @@ function CallForm() {
     }
   }, [openPopup]);
 
+
+
+  const [agentVoices, setAgentVoices] = useState<Array<{ voice_id: string; voice_name: string }>>([]);
+  const [loadingVoices, setLoadingVoices] = useState(true);
+  useEffect(() => {
+    const fetchVoices = async () => {
+      setLoadingVoices(true);
+      try {
+        if (!token) return;
+        const res = await getAgentVoice(token);
+        setAgentVoices(res.voices || []);
+      } catch (error) {
+        console.log(error);
+      }
+      setLoadingVoices(false);
+    };
+
+    fetchVoices();
+  }, [token]);
+
+
   return (
     <>
       <div className="max-w-3xl mx-auto p-8 mt-8">
@@ -965,23 +988,21 @@ function CallForm() {
             </label>
             <select
               {...register("voice", { required: "Agent name is required" })}
-              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.voice ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full px-4 py-2 border rounded-md hover:border-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-900 ${errors.voice ? "border-red-500" : "border-gray-300"}`}
             >
               <option value="">Select Agent</option>
-              <option value="Sam Elliot">Sam Elliot - english (Male)</option>
-              <option value="Peck">Peck - english (Male)</option>
-              <option value="King">King - english (Male)</option>
-              <option value="Barry White">Barry White - english (Male)</option>
-              <option value="Smokey Burt">Smokey Burt - english (Male)</option>
-              <option value="Dark Blues Singer">Dark Blues Singer - english (Male)</option>
-              {/* <option value="Matthew Schmitz">Matthew Schmitz - english (Male)</option> */}
-              <option value="Wyatt">Wyatt - english (Male)</option>
-              <option value="Southern Mike">Southern Mike - english (Male)</option>
-              <option value="Serafina">Serafina - english (Female)</option>
-              <option value="Paul">Paul - english (Male)</option>
 
+              {loadingVoices ? (
+                <option disabled>Loading agents...</option>
+              ) : (
+                agentVoices.map((agent) => (
+                  <option key={agent.voice_id} value={agent.voice_name}>
+                    {agent.voice_name} {/*({agent.voice_id}) */}
+                  </option>
+                ))
+              )}
             </select>
+
             {errors.voice && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.voice.message}

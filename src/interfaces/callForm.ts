@@ -33,3 +33,14 @@ export interface PromptFormValues {
   prompt_name: string;
   system_prompt: string;
 }
+
+
+
+// =========================
+// Agent Voice Interfaces
+// =========================
+
+export interface AgentVoice {
+  voice_id: string;
+  voice_name: string
+}

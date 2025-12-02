@@ -202,6 +202,7 @@ const Sidebar = () => {
     { label: "Initiate Call", path: "/call" },
     { label: "Upload csv", path: "/upload-csv" },
     { label: "Add Prompt", path: "/add-prompt" },
+    { label: "Agents Voice", path: "/voice" },
   ];
 
   const handleLogout = () => {
@@ -220,9 +221,8 @@ const Sidebar = () => {
         <BiMenu size={24} />
       </button>
       <div
-        className={`${
-          open ? "translate-x-0" : "-translate-x-full"
-        } fixed lg:static top-0 left-0 min-h-[100vh] w-64 text-black transform lg:translate-x-0 transition-transform duration-300 z-50 bg-[#13243C] pt-3`}
+        className={`${open ? "translate-x-0" : "-translate-x-full"
+          } fixed lg:static top-0 left-0 min-h-[100vh] w-64 text-black transform lg:translate-x-0 transition-transform duration-300 z-50 bg-[#13243C] pt-3`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           {/* <img src={Logo} width={150} /> */}
@@ -247,11 +247,10 @@ const Sidebar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded relative transition-all text-white hover:text-black duration-200 pl-5 ${
-                  isActive
+                className={`px-3 py-2 rounded relative transition-all text-white hover:text-black duration-200 pl-5 ${isActive
                     ? "bg-[#2b7fff] text-[#fff] font-semibold hover:text-white"
                     : "text-black hover:bg-white"
-                }`}
+                  }`}
                 onClick={() => setOpen(false)}
               >
                 {isActive && (
