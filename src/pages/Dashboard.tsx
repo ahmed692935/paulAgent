@@ -774,6 +774,8 @@ import {
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
+import { getGoogleAuth } from "../api/dashboard";
+
 const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState<RowData | null>(null);
@@ -929,17 +931,57 @@ const Dashboard = () => {
   }, []);
 
 
+  //=====================
+  // Google Button Auth
+  // ====================
+
+  const [googleLoading, setLoading] = useState(false);
+
+  const handleCalendarClick = async () => {
+    if (!token) {
+      toast.error("Missing authentication token");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const data = await getGoogleAuth(token);
+
+      if (data?.authorization_url) {
+        // Open URL in new tab
+        window.open(data.authorization_url, "_blank");
+      } else {
+        toast.error("Authorization URL not found");
+      }
+    } catch (error: any) {
+      console.error("Google Auth Error:", error);
+      toast.error(error?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div className="">
+
       <div className=" py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#13243C] mb-2">
-            {" "}
-            {/*text-[#3F3EED]*/}
-            Analytics Dashboard
-          </h1>
-          <p className="text-black">Monitor and analyze agent interactions</p>
+        <div className="mb-8 flex flex-col md:flex-row items-center gap-6 justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-[#13243C] mb-2">
+              {/*text-[#3F3EED]*/}
+              Analytics Dashboard
+            </h1>
+            <p className="text-black">Monitor and analyze agent interactions</p>
+          </div>
+          <button
+            onClick={handleCalendarClick}
+            disabled={googleLoading}
+            className={`py-3 px-7 h-fit w-fit rounded-lg bg-[#13243C] hover:scale-105 transition-all text-white font-medium text-lg cursor-pointer ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            {loading ? "Loading..." : "Connect Calendar"}
+          </button>
         </div>
 
         {/* Stats Cards */}
@@ -1036,7 +1078,7 @@ const Dashboard = () => {
         </div>
 
         {/* Table Container */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden dash_call_table">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden dash_call_table max-w-full">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

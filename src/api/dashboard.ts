@@ -74,3 +74,24 @@ export const fetchCallTranscript = async (callId: string, token: string) => {
 
   return response.data;
 };
+
+
+
+// ==========================
+// Google Calendar Login 
+// ==========================
+export const getGoogleAuth = async (token: string) => {
+  const response = await axiosInstance.get(
+    `${API_URL}/google/auth/login`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "true",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
+
+  return response.data;
+};

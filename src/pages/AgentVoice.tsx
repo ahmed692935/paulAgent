@@ -162,10 +162,10 @@ function AgentVoice() {
 
                             {/* Voice Name */}
                             <div>
-                                <label className="block mb-1 font-medium">Agent Voice:</label>
+                                <label className="block mb-1 font-medium">Agent Name:</label>
                                 <input
                                     type="text"
-                                    {...register("voice_name", { required: "Agent Voice is required" })}
+                                    {...register("voice_name", { required: "Agent Name is required" })}
                                     className="w-full border px-3 py-2 rounded-lg"
                                 />
                                 {errors.voice_name && (
@@ -197,7 +197,7 @@ function AgentVoice() {
                             ID
                         </th>
                         <th className="px-4 py-4 text-left text-sm font-semibold text-white">
-                            Agent Voice
+                            Agent Name
                         </th>
                         <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                             Action
