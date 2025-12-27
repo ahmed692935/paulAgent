@@ -11,6 +11,10 @@ import AddPrompt from "./pages/AddPrompt";
 import LandingPage from "./pages/LandingPage";
 import UploadCsv from "./pages/UploadCsv";
 import AgentVoice from "./pages/AgentVoice"
+// import GoogleCallback from "./pages/SuccessGoogleAuth";
+import Success from "./pages/success";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 function App() {
   return (
@@ -42,11 +46,35 @@ function App() {
             }
           />
           <Route
+            path="/forgot-password"
+            element={
+              // <PublicRoute>
+              <ForgotPassword />
+              // </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              // <PublicRoute>
+              <ResetPassword />
+              // </PublicRoute>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <PrivateRoute>
                 <Dashboard />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="/success"
+            element={
+              // <PrivateRoute>
+              <Success />
+              // </PrivateRoute>
             }
           />
           <Route

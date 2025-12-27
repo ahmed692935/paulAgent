@@ -937,6 +937,31 @@ const Dashboard = () => {
 
   const [googleLoading, setLoading] = useState(false);
 
+  // const handleCalendarClick = async () => {
+  //   if (!token) {
+  //     toast.error("Missing authentication token");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   try {
+  //     const data = await getGoogleAuth(token);
+
+  //     if (data?.authorization_url) {
+  //       // Open URL in new tab
+  //       window.open(data.authorization_url, "_blank");
+  //     } else {
+  //       toast.error("Authorization URL not found");
+  //     }
+  //   } catch (error: any) {
+  //     console.error("Google Auth Error:", error);
+  //     toast.error(error?.message || "Something went wrong");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const handleCalendarClick = async () => {
     if (!token) {
       toast.error("Missing authentication token");
@@ -948,8 +973,8 @@ const Dashboard = () => {
       const data = await getGoogleAuth(token);
 
       if (data?.authorization_url) {
-        // Open URL in new tab
-        window.open(data.authorization_url, "_blank");
+        // Redirect in same tab
+        window.location.href = data.authorization_url;
       } else {
         toast.error("Authorization URL not found");
       }
@@ -1084,25 +1109,25 @@ const Dashboard = () => {
               <thead>
 
                 <tr className="bg-[#13243C] border-b border-blue-500">
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     User Info
                   </th>
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Agent Name
                   </th>
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Receiver Number
                   </th>
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Call Status
                   </th>
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Call Creation
                   </th>
-                  <th className="px-4 py-4 text-left text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Recording Url
                   </th>
-                  <th className="px-4 py-4 text-center text-sm font-semibold text-white whitespace-nowrap">
+                  <th className="px-4 py-4 text-center text-sm font-semibold text-white">
                     Action
                   </th>
                 </tr>
@@ -1128,18 +1153,18 @@ const Dashboard = () => {
                       className={`relative bg-white hover:bg-blue-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-blue-25" : "bg-white "
                         }`}
                     >
-                      <td className="px-4 py-2 text-gray-800 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-800">
                         {row.username}
                         <p className="text-xs">{row.email}</p>
                         {/* <p className="text-xs">{row.from_number || "N/A"}</p> */}
                       </td>
-                      <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-700 ">
                         {row.voice_name}
                       </td>
-                      <td className="px-4 py-2 text-gray-700 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-700">
                         {row.to_number}
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap">
+                      <td className="px-4 py-2">
                         <span
                           className={`px-2 py-1 rounded-full font-semibold
                     ${row.status === "completed" || row.status === "connected"
@@ -1160,12 +1185,12 @@ const Dashboard = () => {
                           {row.status}
                         </span>
                       </td>
-                      <td className="px-4 py-2 text-gray-600 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-600 ">
                         {row.started_at
                           ? new Date(row.started_at).toLocaleString()
                           : "N/A"}
                       </td>
-                      <td className="px-4 py-2 text-gray-600 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-600">
                         <button
                           onClick={() => handleListenRecording(row.call_id)}
                           disabled={loadingRecordings === row.call_id}
@@ -1186,7 +1211,7 @@ const Dashboard = () => {
                         </button>
                       </td>
 
-                      <td className="px-4 py-2 text-center whitespace-nowrap">
+                      <td className="px-4 py-2 text-center">
                         <button
                           onClick={() => handleOpenModal(row)}
                           className="px-4 py-2 cursor-pointer text-sm font-medium bg-[#13243C] text-white rounded-lg hover:scale-105 transition"

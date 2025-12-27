@@ -174,6 +174,18 @@ const SignIn: React.FC = () => {
             Sign up now
           </button>
         </p>
+
+        {/* Forgot Password */}
+        <div className="mt-1 text-center">
+          <button
+            onClick={() => navigate("/forgot-password")}
+            className="text-sm text-[#3d4b52]"
+          >
+            <span className=" hover:underline cursor-pointer">
+              Forgot password
+            </span>
+          </button>
+        </div>
         {/* {loading && <p className="text-red-500 mt-5">Signing In...</p>} */}
         {/* {error && <p className="text-red-500">{error}</p>} */}
       </form>

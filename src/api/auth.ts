@@ -15,3 +15,19 @@ export const loginUser = async (data: SignInData) => {
   console.log(response, "respLogin");
   return response.data;
 };
+
+
+// Forgot Password Api 
+export const sendResetLink = async (email: string) => {
+  const response = await axios.post(`${API_URL}/forgot-password`, { email });
+  return response.data;
+};
+
+// Reset Password
+export const resetPasswordAPI = async (data: {
+  new_password: string;
+  token: string;
+}) => {
+  const response = await axios.post(`${API_URL}/reset-password`, data);
+  return response.data;
+};
