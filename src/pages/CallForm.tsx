@@ -561,7 +561,6 @@ import { useRef, useEffect, useState } from "react";
 import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
-// import type { CallGroup, CallContact } from "../interfaces/callForm";
 
 import { getAgentVoice } from "../api/Voice";
 
@@ -584,7 +583,7 @@ function CallForm() {
       objective: "",
       context: "",
       system_prompt: "",
-      first_name: [],
+      first_names: [],
       language: user?.language || "en",
       voice: "",
     },
@@ -705,10 +704,12 @@ function CallForm() {
 
   // Number Input || Select multiple number
   const [selectedNumbers, setSelectedNumbers] = useState<string[]>([]);
+  const [selectedNames, setSelectedNames] = useState<string[]>([]);
+
   const [typedValue, setTypedValue] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // const handleRemoveNumber = (num: string) => {
+  // const handleRemoveNumber = (num) => {
   //   const updated = selectedNumbers.filter((n) => n !== num);
   //   setSelectedNumbers(updated);
 
@@ -718,11 +719,7 @@ function CallForm() {
   //   });
   // };
 
-  // Selected names ki state maintain karein
-  const [selectedNames, setSelectedNames] = useState<string[]>([]);
-
-  const handleRemoveNumber = (index: number) => {
-    // Dono arrays se remove karein using index
+  const handleRemoveContact = (index: number) => {
     const updatedNumbers = selectedNumbers.filter((_, i) => i !== index);
     const updatedNames = selectedNames.filter((_, i) => i !== index);
 
@@ -730,7 +727,7 @@ function CallForm() {
     setSelectedNames(updatedNames);
 
     setValue("phone_numbers", updatedNumbers);
-    setValue("first_name", updatedNames); // Sync with Form
+    setValue("first_names", updatedNames); // Sync with RHF
   };
 
   let newNum = typedValue.trim();
@@ -783,6 +780,7 @@ function CallForm() {
 
         // Reset phone number tags
         setSelectedNumbers([]);
+        setSelectedNames([]);
         setTypedValue("");
 
         // RESET EXCEPT name, email, language
@@ -796,7 +794,7 @@ function CallForm() {
             objective: "",
             context: "",
             system_prompt: "",
-            first_name: [],
+            first_names: [],
             voice: "",
           },
           { keepDefaultValues: false }
@@ -828,39 +826,6 @@ function CallForm() {
   }, [token]);
 
 
-  // =====================
-  // one prompt for one group of contacts
-  // =====================
-  // const [groups, setGroups] = useState<CallGroup[]>([]);
-  // const [tempContacts, setTempContacts] = useState<CallContact[]>([]);
-
-  // // Jab dropdown se contact select ho
-  // const handleAddContact = (firstName: string, phoneNumber: string) => {
-  //   const formattedNum = phoneNumber.startsWith("+") ? phoneNumber : "+" + phoneNumber;
-  //   if (tempContacts.find(c => c.phone_number === formattedNum)) return;
-
-  //   setTempContacts([...tempContacts, { first_name: firstName, phone_number: formattedNum }]);
-  // };
-
-  // // Jab Context select ho aur "Add to Group" click karein
-  // const addCurrentToGroup = (promptName: string, systemPrompt: string) => {
-  //   if (tempContacts.length === 0) {
-  //     toast.error("Pehle kuch numbers select karein");
-  //     return;
-  //   }
-
-  //   const newGroup: CallGroup = {
-  //     context: promptName,
-  //     system_prompt: systemPrompt,
-  //     contacts: [...tempContacts]
-  //   };
-
-  //   setGroups([...groups, newGroup]);
-  //   setTempContacts([]); // Reset numbers for next group
-  //   setTypedContext(""); // Reset context input
-  // };
-
-
   return (
     <>
       <div className="max-w-3xl mx-auto p-8 mt-8">
@@ -879,7 +844,7 @@ function CallForm() {
                 type="text"
                 {...register("caller_name", { required: "Name is required" })}
                 className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 hover:border-blue-900
-    ${errors.caller_name ? "border-red-500" : "border-gray-300"}`}
+ ${errors.caller_name ? "border-red-500" : "border-gray-300"}`}
                 placeholder="Your Name"
               />
               {errors.caller_name && (
@@ -903,7 +868,7 @@ function CallForm() {
                   },
                 })}
                 className={`w-full px-4 hover:border-blue-900
-    py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
+ py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
                   }`}
                 placeholder="name@example.com"
               />
@@ -924,20 +889,32 @@ function CallForm() {
 
               <div
                 className={`flex flex-wrap items-center gap-1 w-full min-h-[42px] px-2 py-1 border rounded-md 
-          ${errors.phone_numbers ? "border-red-500" : "border-gray-300"}
-          hover:border-blue-900 focus-within:ring-1 focus-within:ring-blue-900`}
+      ${errors.phone_numbers ? "border-red-500" : "border-gray-300"}
+      hover:border-blue-900 focus-within:ring-1 focus-within:ring-blue-900`}
                 onClick={() => inputRef.current?.focus()}
               >
                 {/* TAGS */}
-                {selectedNumbers.map((num, index) => (
+                {/* {selectedNumbers.map((num) => (
                   <span
-                    key={index}
+                    key={num}
                     className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1"
                   >
-                    {num} ({selectedNames[index]})
+                    {num}
                     <button
                       type="button"
-                      onClick={() => handleRemoveNumber(index)}
+                      onClick={() => handleRemoveNumber(num)}
+                      className="font-bold cursor-pointer"
+                    >
+                      &times;
+                    </button>
+                  </span>
+                ))} */}
+                {selectedNumbers.map((num, index) => (
+                  <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1">
+                    {selectedNames[index] || "User"}: {num}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveContact(index)} // Index pass karein
                       className="font-bold cursor-pointer"
                     >
                       &times;
@@ -955,37 +932,52 @@ function CallForm() {
                   onChange={(e) => {
                     setTypedValue(e.target.value);
                   }}
+                  // onKeyDown={(e) => {
+                  //   if (e.key === "Enter" || e.key === "," || e.key === " ") {
+                  //     e.preventDefault();
+
+                  //     let newNum = typedValue.trim();
+                  //     if (!newNum) return;
+
+                  //     // STEP 1: Auto add "+"
+                  //     if (!newNum.startsWith("+")) {
+                  //       newNum = "+" + newNum;
+                  //     }
+
+                  //     // STEP 2: Duplicate check
+                  //     if (selectedNumbers.includes(newNum)) {
+                  //       toast.error("Number already selected");
+                  //       setTypedValue("");
+                  //       return;
+                  //     }
+
+                  //     // // STEP 3: Max limit check
+                  //     // if (selectedNumbers.length >= 15) {
+                  //     //   toast.error("Max 15 numbers allowed");
+                  //     //   return;
+                  //     // }
+
+                  //     // STEP 4: Add to tags
+                  //     const updated = [...selectedNumbers, newNum];
+                  //     setSelectedNumbers(updated);
+                  //     setValue("phone_numbers", updated);
+
+                  //     // Clear typed input
+                  //     setTypedValue("");
+                  //   }                    
+                  // }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === "," || e.key === " ") {
-                      e.preventDefault();
+                      // ... (aapka purana logic)
 
-                      let newNum = typedValue.trim();
-                      if (!newNum) return;
+                      const updatedNumbers = [...selectedNumbers, newNum];
+                      const updatedNames = [...selectedNames, "User"]; // Placeholder name taaki length match ho
 
-                      // STEP 1: Auto add "+"
-                      if (!newNum.startsWith("+")) {
-                        newNum = "+" + newNum;
-                      }
+                      setSelectedNumbers(updatedNumbers);
+                      setSelectedNames(updatedNames);
 
-                      // STEP 2: Duplicate check
-                      if (selectedNumbers.includes(newNum)) {
-                        toast.error("Number already selected");
-                        setTypedValue("");
-                        return;
-                      }
-
-                      // // STEP 3: Max limit check
-                      // if (selectedNumbers.length >= 15) {
-                      //   toast.error("Max 15 numbers allowed");
-                      //   return;
-                      // }
-
-                      // STEP 4: Add to tags
-                      const updated = [...selectedNumbers, newNum];
-                      setSelectedNumbers(updated);
-                      setValue("phone_numbers", updated);
-
-                      // Clear typed input
+                      setValue("phone_numbers", updatedNumbers);
+                      setValue("first_names", updatedNames);
                       setTypedValue("");
                     }
                   }}
@@ -996,27 +988,46 @@ function CallForm() {
 
               {/* DROPDOWN */}
               {showDropdown && filteredContacts.length > 0 && (
-                <ul className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">
+                <ul className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg p-5  space-y-2">
                   {filteredContacts.map((c, idx) => (
+                    // <li
+                    //   key={idx}
+                    //   onClick={() => {
+                    //     let number = c.phoneNumber;
+                    //     if (!number.startsWith("+")) {
+                    //       number = "+" + number;
+                    //     }
+
+                    //     if (selectedNumbers.includes(number)) {
+                    //       toast.error("Number already selected");
+                    //       return;
+                    //     }
+
+                    //     // if (selectedNumbers.length >= 15) {
+                    //     //   toast.error("Max 15 numbers allowed");
+                    //     //   return;
+                    //     // }
+
+                    //     const updated = [...selectedNumbers, number];
+                    //     setSelectedNumbers(updated);
+                    //     setValue("phone_numbers", updated);
+                    //     setValue("first_name", c.firstName);
+                    //     setTypedValue("");
+                    //   }}                      
+                    //   className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+                    // >
                     <li
                       key={idx}
                       onClick={() => {
                         let number = c.phoneNumber;
-                        if (!number.startsWith("+")) {
-                          number = "+" + number;
-                        }
+                        if (!number.startsWith("+")) number = "+" + number;
 
                         if (selectedNumbers.includes(number)) {
                           toast.error("Number already selected");
                           return;
                         }
 
-                        // if (selectedNumbers.length >= 15) {
-                        //   toast.error("Max 15 numbers allowed");
-                        //   return;
-                        // }
-
-                        // Sync numbers and names
+                        // Dono arrays ko sath update karein
                         const newNumbers = [...selectedNumbers, number];
                         const newNames = [...selectedNames, c.firstName];
 
@@ -1024,14 +1035,12 @@ function CallForm() {
                         setSelectedNames(newNames);
 
                         setValue("phone_numbers", newNumbers);
-                        setValue("first_name", newNames);
-
+                        setValue("first_names", newNames); // Ab ye string[] jayega
                         setTypedValue("");
-                        setShowDropdown(false);
                       }}
-                      className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+                      className="cursor-pointer hover:bg-blue-100"
                     >
-                      <span className="font-medium">{c.firstName}</span> -{" "}
+                      <span className="">{c.firstName}</span> -{" "}
                       {c.phoneNumber}
                     </li>
                   ))}
@@ -1085,8 +1094,8 @@ function CallForm() {
               }}
               onFocus={() => setShowPromptDropdown(true)}
               className={`w-full px-4 py-2 border rounded-md hover:border-blue-900
-                  focus:outline-none focus:ring-1 focus:ring-blue-900 
-                  ${errors.context ? "border-red-500" : "border-gray-300"}`}
+              focus:outline-none focus:ring-1 focus:ring-blue-900 
+              ${errors.context ? "border-red-500" : "border-gray-300"}`}
             />
 
             {errors.context && (
@@ -1164,13 +1173,13 @@ function CallForm() {
               Call Initiated
             </h2>{" "}
             {/* <div className="flex flex-wrap items-center mb-4 px-6">
-                  {" "}
-                  <span className="font-medium">Call ID:</span>{" "}
-                  <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
-                    {" "}
-                    {callId}{" "}
-                  </span>{" "}
-                </div>{" "} */}
+              {" "}
+              <span className="font-medium">Call ID:</span>{" "}
+              <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
+                {" "}
+                {callId}{" "}
+              </span>{" "}
+            </div>{" "} */}
             <div className="rounded-lg">
               {" "}
               {/* Caller Section */}{" "}
@@ -1189,9 +1198,9 @@ function CallForm() {
                 </div>{" "}
                 {/* Status Below */}{" "}
                 {/* <p className="mt-6 text-lg font-medium text-[#13243C] animate-pulse">
-                      {" "}
-                      {status ?? "Connecting..."}{" "}
-                    </p>{" "} */}
+                  {" "}
+                  {status ?? "Connecting..."}{" "}
+                </p>{" "} */}
               </div>{" "}
             </div>{" "}
             {/* <div className="p-6 max-h-96 overflow-y-auto border-t border-blue-200 bg-blue-50 "> */}{" "}
@@ -1199,12 +1208,12 @@ function CallForm() {
             <div className="p-6 border-t border-[#d1d5dc] flex justify-center">
               {" "}
               {/* <button
-                    onClick={() => callId && handlePoll(callId)}
-                    className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-[#13243C] text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
-                  >
-                    {" "}
-                    Check Status Now{" "}
-                  </button>{" "} */}
+                onClick={() => callId && handlePoll(callId)}
+                className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-[#13243C] text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
+              >
+                {" "}
+                Check Status Now{" "}
+              </button>{" "} */}
               <button
                 onClick={() => dispatch(togglePopup(false))}
                 className="ml-4 px-6 py-2 bg-white border border-[#13243C] text-[#13243C] text-base font-semibold rounded-lg cursor-pointer"
