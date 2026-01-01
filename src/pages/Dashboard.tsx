@@ -991,38 +991,11 @@ const Dashboard = () => {
   // -----------------------
   // Call Outcome
   // ----------------------
-  // const [outcomes, setOutcomes] = useState<any[]>([]);
-
-  // useEffect(() => {
-  //   const loadHistory = async () => {
-  //     if (token) {
-  //       try {
-  //         dispatch(fetchCallsStart());
-
-  //         // Dono APIs ko parallel mein call karna behtar hai
-  //         const [historyData, outcomeData] = await Promise.all([
-  //           fetchCallHistory(token, currentPage, pageSize),
-  //           callOutcomes(token)
-  //         ]);
-
-  //         dispatch(
-  //           fetchCallsSuccess({
-  //             calls: historyData.calls,
-  //             pagination: historyData.pagination,
-  //           })
-  //         );
-
-  //         setOutcomes(outcomeData); // Outcome data ko state mein save karein
-
-  //       } catch (err: unknown) {
-  //         console.error("Failed to fetch data:", err);
-  //         dispatch(fetchCallsFailure("Failed to load dashboard data"));
-  //       }
-  //     }
-  //   };
-
-  //   loadHistory();
-  // }, [dispatch, token, currentPage]);
+  const statusStyles: Record<string, string> = {
+    booked: "text-green-600 font-semibold",
+    call_again: "text-yellow-600 font-semibold",
+    do_not_call: "text-red-600 font-semibold",
+  };
 
 
   return (
@@ -1159,6 +1132,9 @@ const Dashboard = () => {
                   <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Call Status
                   </th>
+                  <th className="px-4 py-4 text-left text-sm font-semibold text-white">
+                    Call outComes
+                  </th>
                   {/* <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Call Outcome
                   </th> */}
@@ -1225,6 +1201,9 @@ const Dashboard = () => {
                         >
                           {row.status}
                         </span>
+                      </td>
+                      <td className={`px-4 py-2 ${statusStyles[(row.call_outcome_status || "") as string] || "text-gray-700"}`}>
+                        {row.call_outcome_status}
                       </td>
                       {/* <td className="px-4 py-2 text-gray-600">
                         {outcomes.find(o => o.call_id === row.call_id)?.outcome_text || "No Outcome"}

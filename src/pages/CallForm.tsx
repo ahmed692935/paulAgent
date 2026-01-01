@@ -539,12 +539,12 @@
 
 // src/components/CallForm.jsx
 import { useForm } from "react-hook-form";
-import type { CallFormInputs } from "../interfaces/callForm";
+import type { CallFormInputs, CallGroup } from "../interfaces/callForm";
 import {
   createCallFailure,
   createCallStart,
   createCallSuccess,
-  resetCall,
+  // resetCall,
   // setTranscript,
   togglePopup,
 } from "../store/slices/callForm";
@@ -573,6 +573,7 @@ function CallForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    getValues, // Added getValues
     reset,
   } = useForm<CallFormInputs>({
     defaultValues: {
@@ -584,8 +585,9 @@ function CallForm() {
       context: "",
       system_prompt: "",
       first_names: [],
-      language: user?.language || "en",
+      language: user?.language || "english",
       voice: "",
+      groups: [],
     },
   });
 
@@ -595,25 +597,128 @@ function CallForm() {
     (state: RootState) => state.auth.user?.access_token
   );
 
-  const { openPopup, transcript } = useSelector(
+  const { openPopup } = useSelector(
     (state: RootState) => state.call
   );
 
-  console.log(transcript, "call id");
   // const navigate = useNavigate();
+  // Call Groups State
+  const [groups, setGroups] = useState<CallGroup[]>([]);
+
+  const handleAddGroup = () => {
+    // Validate inputs
+    const currentContext = typedContext || getValues("context");
+    // const currentSystemPrompt = getValues("system_prompt"); // If you want to store specific system prompt too
+
+    if (selectedNumbers.length === 0) {
+      toast.error("Please select at least one phone number.");
+      return;
+    }
+    if (!currentContext) {
+      toast.error("Please provide a generic context or select a prompt.");
+      return;
+    }
+
+    const newGroup: CallGroup = {
+      context: currentContext,
+      system_prompt: getValues("system_prompt") || "",
+      contacts: selectedNumbers.map((num, idx) => ({
+        phone_number: num,
+        first_name: selectedNames[idx] || "User",
+      })),
+    };
+
+    setGroups([...groups, newGroup]);
+
+    // Reset Builder Inputs
+    setSelectedNumbers([]);
+    setSelectedNames([]);
+    setValue("phone_numbers", []);
+    setValue("first_names", []);
+    
+    setTypedValue("");
+    setTypedContext("");
+    setValue("context", "");
+    setValue("system_prompt", "");
+    
+    toast.success("Group added to queue!");
+  };
+
+  const handleRemoveGroup = (idx: number) => {
+    const updated = groups.filter((_, i) => i !== idx);
+    setGroups(updated);
+  };
 
   const onSubmit = async (values: CallFormInputs) => {
     try {
-      dispatch(resetCall());
-      dispatch(createCallStart());
       if (!token) throw new Error("No token found. Please login again.");
 
-      const res = await initiateCall(values, token);
-      dispatch(createCallSuccess(res));
+      // If groups are empty but user filled the inputs, treat it as one group
+      let finalGroups = [...groups];
+      if (finalGroups.length === 0) {
+        if (selectedNumbers.length > 0 && values.context) {
+          finalGroups.push({
+            context: values.context,
+            system_prompt: values.system_prompt || "",
+            contacts: selectedNumbers.map((num, idx) => ({
+              phone_number: num,
+              first_name: selectedNames[idx] || "User",
+            })),
+          });
+        } else {
+          toast.error("Please add at least one group to the queue.");
+          return;
+        }
+      }
+
+      dispatch(createCallStart());
+
+      // Iterate and send request for EACH group
+      for (const [index, group] of finalGroups.entries()) {
+        const payload = {
+          caller_name: values.caller_name,
+          caller_email: values.caller_email,
+          caller_number: values.caller_number, // Pass if needed, usually empty in this logic
+          // Common fields
+          language: values.language,
+          voice: values.voice,
+          // Group specific fields
+          phone_numbers: group.contacts.map((c) => c.phone_number),
+          first_names: group.contacts.map((c) => c.first_name),
+          context: group.context,
+          system_prompt: group.system_prompt,
+        };
+
+        try {
+          // Toast or log progress
+          if (finalGroups.length > 1) {
+             toast.loading(`Initiating group ${index + 1} of ${finalGroups.length}...`, { id: "call-loading" });
+          }
+          
+          const res = await initiateCall(payload, token);
+          
+          // Only dispatch success/popup for the LAST one to avoid flickering or decide logic?
+          // For now dispatch for each might be safer to ensure state updates, 
+          // OR better: dispatch success only after loop, or update callID
+          
+          dispatch(createCallSuccess(res)); 
+          localStorage.setItem("lastCallId", res.call_id);
+          localStorage.setItem("callerEmail", values.caller_email);
+          
+        } catch (err) {
+            console.error(`Error in group ${index + 1}`, err);
+            toast.error(`Failed to initiate group ${index + 1}`);
+            // Continue or break? Usually continue to try others
+        }
+      }
+      
+      toast.dismiss("call-loading");
+      toast.success("All call requests processed.");
       reset();
 
-      localStorage.setItem("lastCallId", res.call_id);
-      localStorage.setItem("callerEmail", values.caller_email);
+      // Clear groups state
+      setGroups([]);
+        
     } catch (err: unknown) {
       const error = err as AxiosError<{ error: string }>;
       toast.error(error?.response?.data?.error || "Oops an error occurred");
@@ -796,9 +901,11 @@ function CallForm() {
             system_prompt: "",
             first_names: [],
             voice: "",
+            groups: [],
           },
           { keepDefaultValues: false }
         );
+        setGroups([]);
       }, 10000); // 10 seconds
 
       return () => clearTimeout(timer);
@@ -988,7 +1095,7 @@ function CallForm() {
 
               {/* DROPDOWN */}
               {showDropdown && filteredContacts.length > 0 && (
-                <ul className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg p-5  space-y-2">
+                <ul className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">
                   {filteredContacts.map((c, idx) => (
                     // <li
                     //   key={idx}
@@ -1038,7 +1145,7 @@ function CallForm() {
                         setValue("first_names", newNames); // Ab ye string[] jayega
                         setTypedValue("");
                       }}
-                      className="cursor-pointer hover:bg-blue-100"
+                      className="cursor-pointer hover:bg-blue-100 px-4 py-2"
                     >
                       <span className="">{c.firstName}</span> -{" "}
                       {c.phoneNumber}
@@ -1085,7 +1192,7 @@ function CallForm() {
             </label>
 
             <input
-              {...register("context", { required: "Context is required" })}
+              // {...register("context", { required: "Context is required" })}
               value={typedContext} // controlled input
               onChange={(e) => {
                 setTypedContext(e.target.value);
@@ -1130,8 +1237,54 @@ function CallForm() {
             )}
           </div>
 
+
+          {/* Add to Queue Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              type="button"
+              onClick={handleAddGroup}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-semibold cursor-pointer"
+            >
+              Add to Queue
+            </button>
+          </div>
+
+          {/* GROUPS PREVIEW */}
+          {groups.length > 0 && (
+            <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mt-4">
+              <h3 className="font-bold text-[#13243C] mb-3">
+                Call Queue ({groups.length})
+              </h3>
+              <div className="space-y-3">
+                {groups.map((grp, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white p-3 rounded shadow-sm border border-gray-100 flex justify-between items-start"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-blue-900">
+                        Context: {grp.context.substring(0, 50)}...
+                      </p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        Contacts: {grp.contacts.length} (
+                        {grp.contacts.map((c) => c.first_name).join(", ")})
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveGroup(idx)}
+                      className="text-red-500 text-sm font-bold hover:text-red-700 cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Language */}
-          <div>
+          <div className="mt-4">
             <label className="block text-sm font-semibold text-[#13243C] mb-1">
               Language
             </label>

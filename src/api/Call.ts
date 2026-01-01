@@ -1,5 +1,5 @@
 // import axios from "axios";
-import type { CallFormInputs } from "../interfaces/callForm";
+import type { CallFormInputs, InitiateCallPayload } from "../interfaces/callForm";
 import axiosInstance from "./axiosInterceptor";
 const API_URL = import.meta.env.VITE_API_URL as string;
 
@@ -18,7 +18,7 @@ const API_URL = import.meta.env.VITE_API_URL as string;
 //   return response.data;
 // };
 
-export const initiateCall = async (data: CallFormInputs, token: string) => {
+export const initiateCall = async (data: InitiateCallPayload, token: string) => {
   const response = await axiosInstance.post(
     `${API_URL}/assistant-bulk-call`,
     data,

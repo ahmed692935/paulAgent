@@ -144,6 +144,7 @@ export interface Call {
   user_id: number;
   username: string;
   email: string;
+  call_outcome_status: string | null;
 }
 
 // Pagination info
