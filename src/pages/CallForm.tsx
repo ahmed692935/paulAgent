@@ -561,6 +561,7 @@ import { useRef, useEffect, useState } from "react";
 import { IoCall } from "react-icons/io5";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
+// import type { CallGroup, CallContact } from "../interfaces/callForm";
 
 import { getAgentVoice } from "../api/Voice";
 
@@ -583,6 +584,7 @@ function CallForm() {
       objective: "",
       context: "",
       system_prompt: "",
+      first_name: [],
       language: user?.language || "en",
       voice: "",
     },
@@ -706,14 +708,29 @@ function CallForm() {
   const [typedValue, setTypedValue] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleRemoveNumber = (num: string) => {
-    const updated = selectedNumbers.filter((n) => n !== num);
-    setSelectedNumbers(updated);
+  // const handleRemoveNumber = (num: string) => {
+  //   const updated = selectedNumbers.filter((n) => n !== num);
+  //   setSelectedNumbers(updated);
 
-    setValue("phone_numbers", updated, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+  //   setValue("phone_numbers", updated, {
+  //     shouldValidate: true,
+  //     shouldDirty: true,
+  //   });
+  // };
+
+  // Selected names ki state maintain karein
+  const [selectedNames, setSelectedNames] = useState<string[]>([]);
+
+  const handleRemoveNumber = (index: number) => {
+    // Dono arrays se remove karein using index
+    const updatedNumbers = selectedNumbers.filter((_, i) => i !== index);
+    const updatedNames = selectedNames.filter((_, i) => i !== index);
+
+    setSelectedNumbers(updatedNumbers);
+    setSelectedNames(updatedNames);
+
+    setValue("phone_numbers", updatedNumbers);
+    setValue("first_name", updatedNames); // Sync with Form
   };
 
   let newNum = typedValue.trim();
@@ -779,6 +796,7 @@ function CallForm() {
             objective: "",
             context: "",
             system_prompt: "",
+            first_name: [],
             voice: "",
           },
           { keepDefaultValues: false }
@@ -810,6 +828,39 @@ function CallForm() {
   }, [token]);
 
 
+  // =====================
+  // one prompt for one group of contacts
+  // =====================
+  // const [groups, setGroups] = useState<CallGroup[]>([]);
+  // const [tempContacts, setTempContacts] = useState<CallContact[]>([]);
+
+  // // Jab dropdown se contact select ho
+  // const handleAddContact = (firstName: string, phoneNumber: string) => {
+  //   const formattedNum = phoneNumber.startsWith("+") ? phoneNumber : "+" + phoneNumber;
+  //   if (tempContacts.find(c => c.phone_number === formattedNum)) return;
+
+  //   setTempContacts([...tempContacts, { first_name: firstName, phone_number: formattedNum }]);
+  // };
+
+  // // Jab Context select ho aur "Add to Group" click karein
+  // const addCurrentToGroup = (promptName: string, systemPrompt: string) => {
+  //   if (tempContacts.length === 0) {
+  //     toast.error("Pehle kuch numbers select karein");
+  //     return;
+  //   }
+
+  //   const newGroup: CallGroup = {
+  //     context: promptName,
+  //     system_prompt: systemPrompt,
+  //     contacts: [...tempContacts]
+  //   };
+
+  //   setGroups([...groups, newGroup]);
+  //   setTempContacts([]); // Reset numbers for next group
+  //   setTypedContext(""); // Reset context input
+  // };
+
+
   return (
     <>
       <div className="max-w-3xl mx-auto p-8 mt-8">
@@ -828,7 +879,7 @@ function CallForm() {
                 type="text"
                 {...register("caller_name", { required: "Name is required" })}
                 className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900 hover:border-blue-900
- ${errors.caller_name ? "border-red-500" : "border-gray-300"}`}
+    ${errors.caller_name ? "border-red-500" : "border-gray-300"}`}
                 placeholder="Your Name"
               />
               {errors.caller_name && (
@@ -852,7 +903,7 @@ function CallForm() {
                   },
                 })}
                 className={`w-full px-4 hover:border-blue-900
- py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
+    py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-900  ${errors.caller_email ? "border-red-500" : "border-gray-300"
                   }`}
                 placeholder="name@example.com"
               />
@@ -873,20 +924,20 @@ function CallForm() {
 
               <div
                 className={`flex flex-wrap items-center gap-1 w-full min-h-[42px] px-2 py-1 border rounded-md 
-      ${errors.phone_numbers ? "border-red-500" : "border-gray-300"}
-      hover:border-blue-900 focus-within:ring-1 focus-within:ring-blue-900`}
+          ${errors.phone_numbers ? "border-red-500" : "border-gray-300"}
+          hover:border-blue-900 focus-within:ring-1 focus-within:ring-blue-900`}
                 onClick={() => inputRef.current?.focus()}
               >
                 {/* TAGS */}
-                {selectedNumbers.map((num) => (
+                {selectedNumbers.map((num, index) => (
                   <span
-                    key={num}
+                    key={index}
                     className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center gap-1"
                   >
-                    {num}
+                    {num} ({selectedNames[index]})
                     <button
                       type="button"
-                      onClick={() => handleRemoveNumber(num)}
+                      onClick={() => handleRemoveNumber(index)}
                       className="font-bold cursor-pointer"
                     >
                       &times;
@@ -965,10 +1016,18 @@ function CallForm() {
                         //   return;
                         // }
 
-                        const updated = [...selectedNumbers, number];
-                        setSelectedNumbers(updated);
-                        setValue("phone_numbers", updated);
+                        // Sync numbers and names
+                        const newNumbers = [...selectedNumbers, number];
+                        const newNames = [...selectedNames, c.firstName];
+
+                        setSelectedNumbers(newNumbers);
+                        setSelectedNames(newNames);
+
+                        setValue("phone_numbers", newNumbers);
+                        setValue("first_name", newNames);
+
                         setTypedValue("");
+                        setShowDropdown(false);
                       }}
                       className="px-4 py-2 cursor-pointer hover:bg-blue-100"
                     >
@@ -1026,8 +1085,8 @@ function CallForm() {
               }}
               onFocus={() => setShowPromptDropdown(true)}
               className={`w-full px-4 py-2 border rounded-md hover:border-blue-900
-              focus:outline-none focus:ring-1 focus:ring-blue-900 
-              ${errors.context ? "border-red-500" : "border-gray-300"}`}
+                  focus:outline-none focus:ring-1 focus:ring-blue-900 
+                  ${errors.context ? "border-red-500" : "border-gray-300"}`}
             />
 
             {errors.context && (
@@ -1105,13 +1164,13 @@ function CallForm() {
               Call Initiated
             </h2>{" "}
             {/* <div className="flex flex-wrap items-center mb-4 px-6">
-              {" "}
-              <span className="font-medium">Call ID:</span>{" "}
-              <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
-                {" "}
-                {callId}{" "}
-              </span>{" "}
-            </div>{" "} */}
+                  {" "}
+                  <span className="font-medium">Call ID:</span>{" "}
+                  <span className="md:px-3 md:mx-5 py-1 text-gray-700 rounded-lg">
+                    {" "}
+                    {callId}{" "}
+                  </span>{" "}
+                </div>{" "} */}
             <div className="rounded-lg">
               {" "}
               {/* Caller Section */}{" "}
@@ -1130,9 +1189,9 @@ function CallForm() {
                 </div>{" "}
                 {/* Status Below */}{" "}
                 {/* <p className="mt-6 text-lg font-medium text-[#13243C] animate-pulse">
-                  {" "}
-                  {status ?? "Connecting..."}{" "}
-                </p>{" "} */}
+                      {" "}
+                      {status ?? "Connecting..."}{" "}
+                    </p>{" "} */}
               </div>{" "}
             </div>{" "}
             {/* <div className="p-6 max-h-96 overflow-y-auto border-t border-blue-200 bg-blue-50 "> */}{" "}
@@ -1140,12 +1199,12 @@ function CallForm() {
             <div className="p-6 border-t border-[#d1d5dc] flex justify-center">
               {" "}
               {/* <button
-                onClick={() => callId && handlePoll(callId)}
-                className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-[#13243C] text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
-              >
-                {" "}
-                Check Status Now{" "}
-              </button>{" "} */}
+                    onClick={() => callId && handlePoll(callId)}
+                    className="w-full cursor-pointer sm:w-auto px-2 sm:px-6 py-2 bg-[#13243C] text-white rounded-lg hover:opacity-90 transform transition-all duration-200 font-medium text-base font-semibold shadow-lg"
+                  >
+                    {" "}
+                    Check Status Now{" "}
+                  </button>{" "} */}
               <button
                 onClick={() => dispatch(togglePopup(false))}
                 className="ml-4 px-6 py-2 bg-white border border-[#13243C] text-[#13243C] text-base font-semibold rounded-lg cursor-pointer"

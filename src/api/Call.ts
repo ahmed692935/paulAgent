@@ -180,3 +180,20 @@ export const deletePrompt = async (prompt_id: number, token: string) => {
   );
   return response.data;
 };
+
+
+// Call Outcomes 
+export const callOutcomes = async (token: string) => {
+  const response = await axiosInstance.get(
+    `${API_URL}/analytics/call-outcome`,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true ",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
+  return response.data.prompts; 
+};

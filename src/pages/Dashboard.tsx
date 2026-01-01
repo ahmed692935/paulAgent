@@ -775,6 +775,7 @@ import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 import { getGoogleAuth } from "../api/dashboard";
+// import { callOutcomes } from "../api/Call";
 
 const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -987,6 +988,43 @@ const Dashboard = () => {
   };
 
 
+  // -----------------------
+  // Call Outcome
+  // ----------------------
+  // const [outcomes, setOutcomes] = useState<any[]>([]);
+
+  // useEffect(() => {
+  //   const loadHistory = async () => {
+  //     if (token) {
+  //       try {
+  //         dispatch(fetchCallsStart());
+
+  //         // Dono APIs ko parallel mein call karna behtar hai
+  //         const [historyData, outcomeData] = await Promise.all([
+  //           fetchCallHistory(token, currentPage, pageSize),
+  //           callOutcomes(token)
+  //         ]);
+
+  //         dispatch(
+  //           fetchCallsSuccess({
+  //             calls: historyData.calls,
+  //             pagination: historyData.pagination,
+  //           })
+  //         );
+
+  //         setOutcomes(outcomeData); // Outcome data ko state mein save karein
+
+  //       } catch (err: unknown) {
+  //         console.error("Failed to fetch data:", err);
+  //         dispatch(fetchCallsFailure("Failed to load dashboard data"));
+  //       }
+  //     }
+  //   };
+
+  //   loadHistory();
+  // }, [dispatch, token, currentPage]);
+
+
   return (
     <div className="">
 
@@ -1121,6 +1159,9 @@ const Dashboard = () => {
                   <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Call Status
                   </th>
+                  {/* <th className="px-4 py-4 text-left text-sm font-semibold text-white">
+                    Call Outcome
+                  </th> */}
                   <th className="px-4 py-4 text-left text-sm font-semibold text-white">
                     Call Creation
                   </th>
@@ -1185,6 +1226,9 @@ const Dashboard = () => {
                           {row.status}
                         </span>
                       </td>
+                      {/* <td className="px-4 py-2 text-gray-600">
+                        {outcomes.find(o => o.call_id === row.call_id)?.outcome_text || "No Outcome"}
+                      </td> */}
                       <td className="px-4 py-2 text-gray-600 ">
                         {row.started_at
                           ? new Date(row.started_at).toLocaleString()

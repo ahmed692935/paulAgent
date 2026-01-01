@@ -5,7 +5,8 @@ export interface CallFormInputs {
   phone_numbers: string[];
   objective: string;
   context: string;
-  system_prompt: string,
+  system_prompt: string;
+  first_name: string[];
   language: "english" | "spanish";
   voice: string;
 }
@@ -43,4 +44,29 @@ export interface PromptFormValues {
 export interface AgentVoice {
   voice_id: string;
   voice_name: string
+}
+
+
+// =======================
+// one prompt for group of calls
+// ==========================
+export interface CallContact {
+  phone_number: string;
+  first_name: string;
+}
+
+export interface CallGroup {
+  context: string;
+  system_prompt: string;
+  contacts: CallContact[];
+}
+
+export interface CallFormInputs {
+  // Common settings
+  caller_name: string;
+  caller_email: string;
+  language: "english" | "spanish";
+  voice: string;
+  // Dynamic Groups
+  groups: CallGroup[]; 
 }
