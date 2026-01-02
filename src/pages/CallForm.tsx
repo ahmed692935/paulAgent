@@ -619,6 +619,20 @@ function CallForm() {
       return;
     }
 
+    // Duplicate Check Across All Existing Groups
+    // for (const num of selectedNumbers) {
+    //   // Check if any group already contains this phone number
+    //   const groupIndex = groups.findIndex((group) =>
+    //     group.contacts.some((contact) => contact.phone_number === num)
+    //   );
+
+    //   if (groupIndex !== -1) {
+    //     // Agar number mil gaya, to toast show karo aur function stop kar do
+    //     toast.error(`This phone number ${num} already exists in Group ${groupIndex + 1}`);
+    //     return; // Stop execution
+    //   }
+    // }
+
     const newGroup: CallGroup = {
       context: currentContext,
       system_prompt: getValues("system_prompt") || "",
@@ -635,12 +649,12 @@ function CallForm() {
     setSelectedNames([]);
     setValue("phone_numbers", []);
     setValue("first_names", []);
-    
+
     setTypedValue("");
     setTypedContext("");
     setValue("context", "");
     setValue("system_prompt", "");
-    
+
     toast.success("Group added to queue!");
   };
 
@@ -649,82 +663,83 @@ function CallForm() {
     setGroups(updated);
   };
 
-  const onSubmit = async (values: CallFormInputs) => {
-    try {
-      if (!token) throw new Error("No token found. Please login again.");
+  // const onSubmit = async (values: CallFormInputs) => {
 
-      // If groups are empty but user filled the inputs, treat it as one group
-      let finalGroups = [...groups];
-      if (finalGroups.length === 0) {
-        if (selectedNumbers.length > 0 && values.context) {
-          finalGroups.push({
-            context: values.context,
-            system_prompt: values.system_prompt || "",
-            contacts: selectedNumbers.map((num, idx) => ({
-              phone_number: num,
-              first_name: selectedNames[idx] || "User",
-            })),
-          });
-        } else {
-          toast.error("Please add at least one group to the queue.");
-          return;
-        }
-      }
+  //   try {
+  //     if (!token) throw new Error("No token found. Please login again.");
 
-      dispatch(createCallStart());
+  //     // If groups are empty but user filled the inputs, treat it as one group
+  //     let finalGroups = [...groups];
+  //     if (finalGroups.length === 0) {
+  //       if (selectedNumbers.length > 0 && values.context) {
+  //         finalGroups.push({
+  //           context: values.context,
+  //           system_prompt: values.system_prompt || "",
+  //           contacts: selectedNumbers.map((num, idx) => ({
+  //             phone_number: num,
+  //             first_name: selectedNames[idx] || "User",
+  //           })),
+  //         });
+  //       } else {
+  //         toast.error("Please add at least one group to the queue.");
+  //         return;
+  //       }
+  //     }
 
-      // Iterate and send request for EACH group
-      for (const [index, group] of finalGroups.entries()) {
-        const payload = {
-          caller_name: values.caller_name,
-          caller_email: values.caller_email,
-          caller_number: values.caller_number, // Pass if needed, usually empty in this logic
-          // Common fields
-          language: values.language,
-          voice: values.voice,
-          // Group specific fields
-          phone_numbers: group.contacts.map((c) => c.phone_number),
-          first_names: group.contacts.map((c) => c.first_name),
-          context: group.context,
-          system_prompt: group.system_prompt,
-        };
+  //     dispatch(createCallStart());
 
-        try {
-          // Toast or log progress
-          if (finalGroups.length > 1) {
-             toast.loading(`Initiating group ${index + 1} of ${finalGroups.length}...`, { id: "call-loading" });
-          }
-          
-          const res = await initiateCall(payload, token);
-          
-          // Only dispatch success/popup for the LAST one to avoid flickering or decide logic?
-          // For now dispatch for each might be safer to ensure state updates, 
-          // OR better: dispatch success only after loop, or update callID
-          
-          dispatch(createCallSuccess(res)); 
-          localStorage.setItem("lastCallId", res.call_id);
-          localStorage.setItem("callerEmail", values.caller_email);
-          
-        } catch (err) {
-            console.error(`Error in group ${index + 1}`, err);
-            toast.error(`Failed to initiate group ${index + 1}`);
-            // Continue or break? Usually continue to try others
-        }
-      }
-      
-      toast.dismiss("call-loading");
-      toast.success("All call requests processed.");
-      reset();
+  //     // Iterate and send request for EACH group
+  //     for (const [index, group] of finalGroups.entries()) {
+  //       const payload = {
+  //         caller_name: values.caller_name,
+  //         caller_email: values.caller_email,
+  //         caller_number: values.caller_number, // Pass if needed, usually empty in this logic
+  //         // Common fields
+  //         language: values.language,
+  //         voice: values.voice,
+  //         // Group specific fields
+  //         phone_numbers: group.contacts.map((c) => c.phone_number),
+  //         first_names: group.contacts.map((c) => c.first_name),
+  //         context: group.context,
+  //         system_prompt: group.system_prompt,
+  //       };
 
-      // Clear groups state
-      setGroups([]);
-        
-    } catch (err: unknown) {
-      const error = err as AxiosError<{ error: string }>;
-      toast.error(error?.response?.data?.error || "Oops an error occurred");
-      dispatch(createCallFailure(error.message));
-    }
-  };
+  //       try {
+  //         // Toast or log progress
+  //         if (finalGroups.length > 1) {
+  //           toast.loading(`Initiating group ${index + 1} of ${finalGroups.length}...`, { id: "call-loading" });
+  //         }
+
+  //         const res = await initiateCall(payload, token);
+
+  //         // Only dispatch success/popup for the LAST one to avoid flickering or decide logic?
+  //         // For now dispatch for each might be safer to ensure state updates, 
+  //         // OR better: dispatch success only after loop, or update callID
+
+  //         dispatch(createCallSuccess(res));
+  //         localStorage.setItem("lastCallId", res.call_id);
+  //         localStorage.setItem("callerEmail", values.caller_email);
+
+  //       } catch (err) {
+  //         console.error(`Error in group ${index + 1}`, err);
+  //         toast.error(`Failed to initiate group ${index + 1}`);
+  //         // Continue or break? Usually continue to try others
+  //       }
+  //     }
+
+  //     toast.dismiss("call-loading");
+  //     toast.success("All call requests processed.");
+  //     reset();
+
+  //     // Clear groups state
+  //     setGroups([]);
+
+  //   } catch (err: unknown) {
+  //     const error = err as AxiosError<{ error: string }>;
+  //     toast.error(error?.response?.data?.error || "Oops an error occurred");
+  //     dispatch(createCallFailure(error.message));
+  //   }
+  // };
 
   // const handlePoll = async (id: string, interval?: number) => {
   //   if (!token) return;
@@ -766,6 +781,84 @@ function CallForm() {
   // }, [openPopup, callId, token]);
 
   // Input tel: Name or phone search in api
+
+  const onSubmit = async (values: CallFormInputs) => {
+    try {
+      if (!token) throw new Error("No token found. Please login again.");
+
+      let finalGroups = [...groups];
+
+      // ✅ Fix: Agar queue khali hai, to check karo selectedNumbers mein kuch hai ya nahi
+      if (finalGroups.length === 0) {
+        const currentContext = values.context || typedContext;
+
+        if (selectedNumbers.length > 0 && currentContext) {
+          finalGroups.push({
+            context: currentContext,
+            system_prompt: values.system_prompt || "",
+            contacts: selectedNumbers.map((num, idx) => ({
+              phone_number: num,
+              first_name: selectedNames[idx] || "User",
+            })),
+          });
+        } else {
+          toast.error("Please select at least one phone number and provide context.");
+          return;
+        }
+      }
+
+      dispatch(createCallStart());
+
+      // Iterate and send request for EACH group
+      for (const [index, group] of finalGroups.entries()) {
+        const payload = {
+          caller_name: values.caller_name,
+          caller_email: values.caller_email,
+          caller_number: values.caller_number,
+          language: values.language,
+          voice: values.voice,
+          // Group specific fields
+          phone_numbers: group.contacts.map((c) => c.phone_number),
+          first_names: group.contacts.map((c) => c.first_name),
+          context: group.context,
+          system_prompt: group.system_prompt,
+        };
+
+        try {
+          if (finalGroups.length > 1) {
+            toast.loading(`Initiating group ${index + 1} of ${finalGroups.length}...`, { id: "call-loading" });
+          }
+
+          const res = await initiateCall(payload, token);
+          dispatch(createCallSuccess(res));
+
+          localStorage.setItem("lastCallId", res.call_id);
+          localStorage.setItem("callerEmail", values.caller_email);
+
+        } catch (err) {
+          console.error(`Error in group ${index + 1}`, err);
+          toast.error(`Failed to initiate group ${index + 1}`);
+        }
+      }
+
+      toast.dismiss("call-loading");
+      toast.success("All call requests processed.");
+
+      // Cleanup
+      reset();
+      setGroups([]);
+      setSelectedNumbers([]); // Selected numbers ko bhi clear karein
+      setSelectedNames([]);
+      setTypedContext("");
+
+    } catch (err: unknown) {
+      const error = err as AxiosError<{ error: string }>;
+      toast.error(error?.response?.data?.error || "Oops an error occurred");
+      dispatch(createCallFailure(error.message));
+    }
+  };
+
+
   const [contacts, setContacts] = useState<
     { firstName: string; phoneNumber: string }[]
   >([]);
@@ -1075,9 +1168,29 @@ function CallForm() {
                   // }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === "," || e.key === " ") {
-                      // ... (aapka purana logic)
+                      e.preventDefault();
+                      let numToValidate = typedValue.trim();
+                      if (!numToValidate) return;
 
-                      const updatedNumbers = [...selectedNumbers, newNum];
+                      if (!numToValidate.startsWith("+")) numToValidate = "+" + numToValidate;
+
+                      // Current selection check
+                      if (selectedNumbers.includes(numToValidate)) {
+                        toast.error("Number already selected");
+                        return;
+                      }
+
+                      // Existing groups check
+                      const existsInAnyGroup = groups.some(group =>
+                        group.contacts.some(contact => contact.phone_number === numToValidate)
+                      );
+
+                      if (existsInAnyGroup) {
+                        toast.error(`This number ${numToValidate} already exists in another group!`);
+                        return;
+                      }
+
+                      const updatedNumbers = [...selectedNumbers, numToValidate];
                       const updatedNames = [...selectedNames, "User"]; // Placeholder name taaki length match ho
 
                       setSelectedNumbers(updatedNumbers);
@@ -1131,6 +1244,16 @@ function CallForm() {
 
                         if (selectedNumbers.includes(number)) {
                           toast.error("Number already selected");
+                          return;
+                        }
+
+                        // Ab check karein ke kya yeh number pehle se kisi Group mein add ho chuka hai
+                        const existsInAnyGroup = groups.some(group =>
+                          group.contacts.some(contact => contact.phone_number === number)
+                        );
+
+                        if (existsInAnyGroup) {
+                          toast.error(`This number ${number} already exists in another group!`);
                           return;
                         }
 
@@ -1196,7 +1319,8 @@ function CallForm() {
               value={typedContext} // controlled input
               onChange={(e) => {
                 setTypedContext(e.target.value);
-                setValue("context", e.target.value); // update RHF
+                // setValue("context", e.target.value); // update RHF
+                setValue("context", e.target.value, { shouldValidate: true });
                 setShowPromptDropdown(true);
               }}
               onFocus={() => setShowPromptDropdown(true)}
