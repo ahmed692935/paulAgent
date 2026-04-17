@@ -21,46 +21,48 @@ const LandCard: React.FC<LandCardProps> = ({
   desc,
   className = "",
   children,
-  titleColor,
 }) => {
   return (
     <div
-      className={`border rounded-xl p-6 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col items-center text-center ${className}`}
+      className={`glass group p-8 rounded-[2rem] hover:bg-white/5 hover:-translate-y-2 transition-all duration-500 flex flex-col items-center text-center relative overflow-hidden ${className}`}
     >
+      {/* Decorative Glow */}
+      <div className="absolute top-0 right-0 w-24 h-24 bg-brand-primary/10 blur-3xl group-hover:bg-brand-primary/20 transition-all duration-500" />
+      
       {/* Image or Icon */}
       {img ? (
         <img
           src={img}
           alt={title || "Card image"}
-          className="h-12 w-12 mb-3"
+          className="h-16 w-16 mb-6 object-contain filter group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
       ) : (
-        icon && <div className="mb-3 text-3xl text-blue-900">{icon}</div>
+        icon && <div className="mb-6 scale-125 text-brand-primary group-hover:scale-150 group-hover:rotate-12 transition-all duration-500">{icon}</div>
       )}
 
       {/* Title */}
       {title && (
-        <h3 className={`text-sm font-semibold mb-2 ${titleColor}`}> {title}</h3>
+        <h3 className="text-xs font-black tracking-widest uppercase text-brand-primary mb-4 opacity-80 group-hover:opacity-100 transition-opacity"> {title}</h3>
       )}
 
       {/* Sub Title */}
       {subtitle && (
-        <h3 className="text-lg font-semibold mb-2 text-[#13243C]">
+        <h3 className="text-2xl font-bold mb-3 text-white">
           {subtitle}
         </h3>
       )}
 
       {/* Value (Optional) */}
       {value && (
-        <p className="font-bold text-3xl text-[#13243C] mt-1 mb-1">{value}</p>
+        <p className="font-black text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mt-1 mb-4">{value}</p>
       )}
 
       {/* Description */}
-      {desc && <p className=" text-sm">{desc}</p>}
+      {desc && <p className="text-gray-400 text-sm leading-relaxed font-medium group-hover:text-gray-300 transition-colors">{desc}</p>}
 
       {/* Custom Children */}
-      {children && <div className="mt-2">{children}</div>}
+      {children && <div className="mt-4">{children}</div>}
     </div>
   );
 };

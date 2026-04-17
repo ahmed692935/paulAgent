@@ -1,4 +1,6 @@
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { MessageSquarePlus, Cpu, BarChart2, ArrowRight } from "lucide-react";
 
 function ThreeSteps() {
   const navigate = useNavigate();
@@ -6,61 +8,83 @@ function ThreeSteps() {
     {
       title: "Assign a Task",
       desc: "Set up your call requirements—whether it’s sales, support, follow-ups, or reminders.",
+      icon: <MessageSquarePlus size={40} />,
+      color: "brand-primary"
     },
     {
       title: "AI Takes Over",
       desc: "Paul.ai dials, engages, and responds in real-time, handling interactions just like a human.",
+      icon: <Cpu size={40} />,
+      color: "brand-secondary"
     },
     {
       title: "Track & Optimize",
       desc: "Access instant call transcripts, insights, and analytics to continuously improve conversations.",
+      icon: <BarChart2 size={40} />,
+      color: "brand-accent"
     },
   ];
 
   return (
-    <section className="flex flex-col items-center px-4 py-12 md:px-16 text-center bg-white overflow-hidden">
+    <section className="py-24 px-6 md:px-16 text-center relative overflow-hidden">
       {/* Section Header */}
-      <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-bold mb-2 text-gray-900">
-        3 Easy Steps to Smarter, AI-Powered Calls
-      </h2>
-      <p className="text-blue-900 text-[clamp(0.875rem,2vw,1rem)] mb-8">
-        Boost Engagement and Drive Results with Paul.ai
-      </p>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mb-16"
+      >
+        <h2 className="text-4xl md:text-7xl font-black text-white tracking-tighter mb-4">
+          3 Steps to <span className="text-brand-primary">Automation.</span>
+        </h2>
+        <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+          Ready to scale your communications? Our onboarding is as seamless as our AI.
+        </p>
+      </motion.div>
 
       {/* Steps Grid */}
-      <div className="flex flex-wrap justify-center items-center gap-6 w-full px-3 sm:px-4">
+      <div className="flex flex-wrap justify-center gap-10 max-w-7xl mx-auto">
         {steps.map((step, index) => (
-          <div
+          <motion.div
             key={index}
-            className="
-        relative rounded-xl overflow-hidden shadow-md hover:shadow-2xl
-        bg-gradient-to-r from-[#13243C] to-[#00021D] text-white
-        flex flex-col justify-center items-center text-center
-        w-[260px] h-[260px] sm:w-[240px] sm:h-[240px] md:w-[250px] md:h-[250px]
-        max-[400px]:w-[220px] max-[400px]:h-[220px] max-[350px]:w-[200px] max-[350px]:h-[200px]
-        transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
-        animate-gradient-move
-      "
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.2, type: "spring", stiffness: 100 }}
+            className="group relative w-full sm:w-[350px]"
           >
-            <h3 className="font-bold text-[clamp(1rem,2.5vw,1.125rem)] text-white drop-shadow-sm">
-              {step.title}
-            </h3>
-            <p className="mt-2 text-[clamp(0.75rem,2vw,0.875rem)] text-gray-200 max-w-[10rem]">
-              {step.desc}
-            </p>
-          </div>
+            {/* Connection Line (Desktop) */}
+            {index < steps.length - 1 && (
+              <div className="hidden lg:block absolute top-1/2 -right-12 w-24 h-[2px] bg-gradient-to-r from-brand-primary/20 to-transparent z-0" />
+            )}
+
+            <div className="glass p-12 rounded-[3.5rem] flex flex-col items-center gap-6 hover:bg-white/5 transition-all duration-500 border border-white/5 group-hover:border-white/20">
+              <div className={`p-6 rounded-3xl bg-dark-card text-${step.color} shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                {step.icon}
+              </div>
+              <h3 className="text-2xl font-black text-white">{step.title}</h3>
+              <p className="text-gray-400 font-medium leading-relaxed">
+                {step.desc}
+              </p>
+            </div>
+          </motion.div>
         ))}
       </div>
 
-      <p className="text-center text-gray-800 mt-8 text-sm md:text-base">
-        It’s that simple!
-      </p>
-      <button
-        onClick={() => navigate("/dashboard")}
-        className="text-[#13243C] text-base font-semibold bg-white px-6 py-3 rounded-md border border-2 border-[#13243C] hover:bg-[#13243C] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer mt-6"
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.6 }}
+        className="mt-20 flex flex-col items-center"
       >
-        <span>Try Paul.ai Today</span>
-      </button>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="group flex items-center gap-3 px-8 py-4 glass rounded-full text-white font-bold hover:bg-white/10 transition-all border border-white/10"
+        >
+          Check out our demo <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+        </button>
+      </motion.div>
     </section>
   );
 }

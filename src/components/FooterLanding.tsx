@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Facebook, Linkedin, Twitter, Instagram, Mail } from "lucide-react";
 
 function FooterLanding() {
   const footerLinks = {
@@ -14,99 +15,99 @@ function FooterLanding() {
       { label: "AI Sales", href: "#" },
       { label: "AI Communication", href: "#" },
     ],
-    "Solutions by Industries": [
+    "Solutions": [
       { label: "Insurance", href: "#" },
       { label: "Education", href: "#" },
       { label: "Healthcare", href: "#" },
       { label: "Real Estate", href: "#" },
-      { label: "Recruiting", href: "#" },
-      { label: "Technology", href: "#" },
-      { label: "Professional Services", href: "#" },
-      { label: "Retail", href: "#" },
       { label: "Automotive", href: "#" },
     ],
     Resources: [
       { label: "Partnership", href: "#" },
       { label: "Comparison", href: "#" },
-      { label: "Enterprise Solution", href: "#" },
+      { label: "Enterprise", href: "#" },
     ],
-    "Contact Us": [{ label: "support@paulcall.ai", href: "#" }],
   };
 
   const socialLinks = [
-    { href: "#", icon: "lucide-facebook" },
-    { href: "#", icon: "lucide-linkedin" },
-    { href: "#", icon: "lucide-twitter" },
-    { href: "#", icon: "lucide-instagram" },
+    { href: "#", icon: <Facebook size={18} /> },
+    { href: "#", icon: <Linkedin size={18} /> },
+    { href: "#", icon: <Twitter size={18} /> },
+    { href: "#", icon: <Instagram size={18} /> },
   ];
 
   return (
-    <>
-      <footer className="text-gray-700 py-10 mt-10 w-full bg-gradient-to-b from-[#13243C] to-[#00021D]">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Logo */}
-          <div className="flex justify-center md:justify-start mb-8">
-            <Link to="/" className="text-2xl text-white font-bold">
-              Paul.<span className="font-semibold text-white">Calling</span>
+    <footer className="relative pt-24 pb-12 mt-20 border-t border-white/5 overflow-hidden">
+      {/* Background Decorative Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[300px] bg-brand-primary/10 blur-[120px] rounded-full" />
+      
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-12">
+          {/* Brand Column */}
+          <div className="md:col-span-2">
+            <Link to="/" className="text-3xl font-black tracking-tighter text-white">
+              Paul<span className="text-brand-primary">.ai</span>
             </Link>
-          </div>
-
-          {/* Footer Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-center md:text-left">
-            {Object.entries(footerLinks).map(([section, links]) => (
-              <div key={section}>
-                <h3 className="font-semibold mb-4 text-white">{section}</h3>
-
-                {section !== "Contact Us" ? (
-                  <ul className="space-y-2">
-                    {links.map(({ label, href }) => (
-                      <li key={label}>
-                        <a
-                          href={href}
-                          className="text-xs text-white hover:text-blue-500 transition-colors"
-                        >
-                          {label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="flex flex-col items-center md:items-start space-y-3">
-                    <a
-                      href={links[0].href}
-                      className="text-sm text-white hover:text-blue-500 transition-colors"
-                    >
-                      {links[0].label}
-                    </a>
-                    {/* Social Icons */}
-                    <div className="flex justify-center md:justify-start space-x-4 mt-2">
-                      {socialLinks.map(({ href, icon }) => (
-                        <a
-                          key={href}
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white transition-colors"
-                        >
-                          <i className={`lucide ${icon}`} />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Bottom */}
-          <div className="border-t border-gray-200 mt-10 pt-6">
-            <p className="text-center text-sm text-white">
-              ©{new Date().getFullYear()} | All rights reserved by Paul.ai AI
+            <p className="mt-6 text-gray-400 font-medium leading-relaxed max-w-xs">
+              Next-generation AI calling agents that transform how businesses communicate. Real. Fast. Intelligent.
             </p>
+            <div className="flex space-x-4 mt-8">
+              {socialLinks.map((social, idx) => (
+                <a
+                  key={idx}
+                  href={social.href}
+                  className="w-10 h-10 rounded-full glass flex items-center justify-center text-gray-400 hover:text-brand-primary hover:bg-white/10 transition-all"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Links Columns */}
+          {Object.entries(footerLinks).map(([section, links]) => (
+            <div key={section} className="col-span-1">
+              <h3 className="text-white font-bold tracking-tight mb-6 uppercase text-xs opacity-50">{section}</h3>
+              <ul className="space-y-4">
+                {links.map(({ label, href }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      className="text-gray-400 hover:text-white transition-colors text-sm font-medium"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Contact Column */}
+          <div className="col-span-1">
+            <h3 className="text-white font-bold tracking-tight mb-6 uppercase text-xs opacity-50">Contact</h3>
+            <a
+              href="mailto:support@paulcall.ai"
+              className="group flex items-center gap-2 text-gray-400 hover:text-brand-primary transition-colors text-sm font-medium"
+            >
+              <Mail size={16} className="group-hover:scale-110 transition-transform" />
+              support@paulcall.ai
+            </a>
           </div>
         </div>
-      </footer>
-    </>
+
+        {/* Bottom Bar */}
+        <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-gray-500 font-medium tracking-wide">
+            © {new Date().getFullYear()} Paul AI Dynamics. Built for the future of calling.
+          </p>
+          <div className="flex gap-6">
+            <a href="#" className="text-xs text-gray-500 hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="text-xs text-gray-500 hover:text-white transition-colors">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
 

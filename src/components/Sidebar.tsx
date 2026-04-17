@@ -185,9 +185,17 @@
 
 // Abdullah Code
 import { useState } from "react";
-import { BiMenu, BiX } from "react-icons/bi";
+import { 
+  Menu, 
+  X, 
+  LayoutDashboard, 
+  PhoneCall, 
+  FileUp, 
+  FileText, 
+  Mic, 
+  LogOut 
+} from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-// import Logo from "../../public/images/sumaLogo.png";
 import { logout } from "../store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -198,80 +206,92 @@ const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { label: "Dashboard", path: "/dashboard" },
-    { label: "Initiate Call", path: "/call" },
-    { label: "Upload csv", path: "/upload-csv" },
-    { label: "Add Prompt", path: "/add-prompt" },
-    { label: "Agents Voice", path: "/voice" },
+    { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
+    { label: "Initiate Call", path: "/call", icon: <PhoneCall size={20} /> },
+    { label: "Upload CSV", path: "/upload-csv", icon: <FileUp size={20} /> },
+    { label: "Add Prompt", path: "/add-prompt", icon: <FileText size={20} /> },
+    { label: "Agents Voice", path: "/voice", icon: <Mic size={20} /> },
   ];
 
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem("user");
-    navigate("/landing-page");
+    navigate("/");
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-full">
       {/* ✅ Mobile Menu Button */}
       <button
-        className="lg:hidden fixed top-1 left-1 z-50 p-2 rounded-md"
+        className="lg:hidden fixed top-4 left-4 z-[60] p-2 glass rounded-xl text-brand-primary active:scale-95 transition-all"
         onClick={() => setOpen(true)}
       >
-        <BiMenu size={24} />
+        <Menu size={24} />
       </button>
+
+      {/* Sidebar Container */}
       <div
-        className={`${open ? "translate-x-0" : "-translate-x-full"
-          } fixed lg:static top-0 left-0 min-h-[100vh] w-64 text-black transform lg:translate-x-0 transition-transform duration-300 z-50 bg-[#13243C] pt-3`}
+        className={`${
+          open ? "translate-x-0" : "-translate-x-full"
+        } fixed lg:static top-0 left-0 h-screen w-64 glass !bg-dark-bg/40 border-r border-white/5 transform lg:translate-x-0 transition-transform duration-500 ease-in-out z-50 flex flex-col`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          {/* <img src={Logo} width={150} /> */}
-          <p
-            className="text-2xl font-bold text-white mx-5 cursor-pointer"
-            onClick={() => navigate("/")}
-          >
-            Calling Dialer
-          </p>
+        {/* Logo Section */}
+        <div className="flex items-center justify-between p-8">
+          <Link to="/" className="text-2xl font-black tracking-tighter text-white">
+            Paul<span className="text-brand-primary">.ai</span>
+          </Link>
           <button
-            className="lg:hidden text-white cursor-pointer"
+            className="lg:hidden p-2 text-white/50 hover:text-brand-accent transition-colors"
             onClick={() => setOpen(false)}
           >
-            <BiX size={24} />
+            <X size={24} />
           </button>
         </div>
 
-        <nav className="flex flex-col gap-1 pt-4 pl-1 relative">
+        {/* Navigation Section */}
+        <nav className="flex-1 px-4 space-y-2 py-4">
+          <p className="px-4 text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-4">Main Menu</p>
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded relative transition-all text-white hover:text-black duration-200 pl-5 ${isActive
-                    ? "bg-[#2b7fff] text-[#fff] font-semibold hover:text-white"
-                    : "text-black hover:bg-white"
-                  }`}
+                className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 relative group ${
+                  isActive
+                    ? "bg-brand-primary/10 text-white font-bold shadow-[inset_0_0_20px_rgba(14,165,233,0.1)]"
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`}
                 onClick={() => setOpen(false)}
               >
+                <div className={`${isActive ? "text-brand-primary" : "text-gray-500 group-hover:text-brand-primary"} transition-colors duration-300`}>
+                  {item.icon}
+                </div>
+                <span className="text-sm tracking-tight">{item.label}</span>
                 {isActive && (
-                  <div className="absolute left-0 top-0 w-1 h-full bg-white rounded-r"></div>
+                  <div className="absolute left-0 w-1.5 h-6 bg-brand-primary rounded-r-full shadow-[0_0_10px_rgba(14,165,233,0.5)]" />
                 )}
-                {item.label}
               </Link>
             );
           })}
+        </nav>
+
+        {/* Bottom Section */}
+        <div className="p-4 mt-auto">
           <button
             onClick={handleLogout}
-            className="px-3 py-2 rounded text-left text-white hover:text-black hover:bg-white pl-5 cursor-pointer transition-all duration-200"
+            className="w-full flex items-center gap-3 px-4 py-4 rounded-2xl text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 transition-all duration-300 font-bold text-sm tracking-tight cursor-pointer"
           >
+            <LogOut size={20} />
             Logout
           </button>
-        </nav>
+        </div>
       </div>
 
+      {/* Mobile Overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/50 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden z-40 transition-opacity duration-500"
           onClick={() => setOpen(false)}
         />
       )}

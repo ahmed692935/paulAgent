@@ -1,10 +1,14 @@
+import { motion } from "framer-motion";
 import LandCard from "../components/LandCard";
-
-import support from "../assets/Icons/support.webp";
-import collection from "../assets/Icons/collection.webp";
-import calender from "../assets/Icons/calender.webp";
-import fifth from "../assets/Icons/fifth.webp";
-import list from "../assets/Icons/list.webp";
+import { 
+  Headphones, 
+  Calendar, 
+  ClipboardList, 
+  Receipt, 
+  Users, 
+  Code,
+  ArrowRight
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function UseCases() {
@@ -13,76 +17,102 @@ function UseCases() {
     {
       title: "Customer Support",
       desc: "Deliver 24/7 AI-powered assistance with Paul.ai, without increasing staff costs.",
-      img: support,
+      icon: <Headphones size={32} />,
     },
     {
       title: "Appointment Scheduling",
       desc: "Paul.ai manages bookings, reschedules, and confirmations seamlessly.",
-      img: calender,
+      icon: <Calendar size={32} />,
     },
     {
       title: "Survey & Feedback Calls",
       desc: "Gather valuable customer insights automatically, without human intervention.",
-      img: list,
+      icon: <ClipboardList size={32} />,
     },
     {
       title: "Collections & Reminders",
       desc: "Automate payment reminders and reduce overdue payments effortlessly with Paul.ai.",
-      img: collection,
+      icon: <Receipt size={32} />,
     },
     {
       title: "HR & Recruitment",
       desc: "Paul.ai pre-screens candidates, schedules interviews, and follows up automatically.",
-      img: fifth,
+      icon: <Users size={32} />,
     },
     {
       title: "Custom Development",
       desc: "Tailored AI solutions from Paul.ai, designed to meet your unique business needs.",
-      img: calender,
+      icon: <Code size={32} />,
     },
   ];
 
   return (
-    <section className="py-16 px-4 md:px-8 text-center bg-white flex flex-col items-center">
+    <section className="py-24 px-6 md:px-8 relative overflow-hidden">
       {/* Header */}
-      <div className="flex flex-col items-center max-w-lg w-full">
-        <span className="px-4 py-1 border border-blue-900 rounded-full text-xs text-black">
+      <div className="flex flex-col items-center text-center mb-16">
+        <motion.span 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="px-4 py-1 glass rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-brand-primary mb-6"
+        >
           Use Cases
-        </span>
-        <h2 className="text-[clamp(1.25rem,5vw,2rem)] font-bold text-gray-900 mt-4">
-          Who Benefits from Paul.ai
-        </h2>
-        <p className="text-blue-900 mt-2 text-[clamp(0.875rem,3vw,1rem)] max-w-md">
-          Sales & Lead Generation – Let Paul handle cold calls, lead
-          qualification, and follow-ups so you can focus on closing deals.
-        </p>
+        </motion.span>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-4xl md:text-6xl font-black text-white tracking-tighter"
+        >
+          Who Benefits from <span className="text-brand-primary">Paul.ai</span>
+        </motion.h2>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="text-gray-400 text-lg mt-6 max-w-2xl font-medium"
+        >
+          Sales & Lead Generation – Let Paul handle cold calls, lead qualification, and follow-ups so you can focus on closing deals.
+        </motion.p>
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-6xl mt-10 justify-items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-7xl mx-auto">
         {useCases.map((item, index) => (
-          <LandCard
+          <motion.div
             key={index}
-            subtitle={item.title}
-            desc={item.desc}
-            img={item.img}
-          />
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.05 }}
+          >
+            <LandCard
+              subtitle={item.title}
+              desc={item.desc}
+              icon={item.icon}
+            />
+          </motion.div>
         ))}
       </div>
 
       {/* Footer */}
-      <p className="text-gray-600 text-[clamp(1rem,3vw,1.25rem)] mt-8 max-w-md text-center">
-        Paul.ai: The Game-Changer for Every Call-Driven Business.
-      </p>
-
-      <div className="mt-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mt-20 flex flex-col items-center glass p-10 rounded-[3rem] max-w-4xl mx-auto text-center"
+      >
+        <p className="text-white text-2xl md:text-3xl font-bold tracking-tight mb-8">
+          Ready to transform your workflow?
+        </p>
         <button
           onClick={() => navigate("/dashboard")}
-          className="text-[#13243C] text-base font-semibold bg-white px-6 py-3 rounded-md border border-2 border-[#13243C] hover:bg-[#13243C] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+          className="group px-10 py-4 bg-brand-primary text-white rounded-full font-bold hover:shadow-[0_0_30px_rgba(14,165,233,0.3)] hover:scale-105 transition-all flex items-center gap-2"
         >
-          <span>Request a Demo</span>
+          <span>Request a Connections</span> <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
         </button>
-      </div>
+      </motion.div>
     </section>
   );
 }
