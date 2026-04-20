@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { uploadContactsFile } from "../api/Call";
 import { motion, AnimatePresence } from "framer-motion";
 import { UploadCloud, FileText, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { createCampaign, uploadCampaignCsv } from "../api/Campaign";
 
 function UploadCsv() {
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [campaignName, setCampaignName] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token") || "";
 
@@ -30,11 +31,17 @@ function UploadCsv() {
 
     setLoading(true);
     try {
-      const res = await uploadContactsFile(file, token);
-      localStorage.setItem("uploadedContacts", JSON.stringify(res.data));
-      toast.success("Connection established. Data uploaded.");
-      navigate("/call");
+      // 1. Create a campaign
+      const name = campaignName.trim() || `Import - ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const campaign = await createCampaign({ name, description: `Imported via Data Import on ${new Date().toLocaleString()}` }, token);
+      
+      // 2. Upload CSV to that campaign
+      const res = await uploadCampaignCsv(campaign.id, file, token);
+      
+      toast.success(`Campaign initialized with ${res.uploaded_rows} records.`);
+      navigate("/campaigns");
     } catch (error) {
+      console.error(error);
       toast.error("Data transmission failed.");
     } finally {
       setLoading(false);
@@ -97,10 +104,20 @@ function UploadCsv() {
           )}
         </div>
 
-        <div className="space-y-4 mb-10">
+        <div className="space-y-4 mb-10 w-full max-w-sm">
           <h2 className="text-2xl font-black text-white tracking-tight">
             {dragActive ? "Ready for Import" : "Select Data Source"}
           </h2>
+          <div className="space-y-2 text-left">
+            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Campaign Name (Optional)</label>
+            <input 
+              type="text"
+              value={campaignName}
+              onChange={(e) => setCampaignName(e.target.value)}
+              placeholder="E.g. Q2 Outreach Campaign"
+              className="w-full px-6 py-4 glass !bg-white/5 border border-white/5 rounded-2xl text-white focus:border-brand-primary outline-none transition-all font-medium text-sm"
+            />
+          </div>
           <p className="text-gray-500 font-medium text-sm">
             Drag and drop your file here, or click to browse.
           </p>

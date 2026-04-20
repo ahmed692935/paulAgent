@@ -209,3 +209,18 @@ export const callOutcomes = async (token: string) => {
   );
   return response.data.prompts; 
 };
+
+// Appointments
+export const getAppointments = async (token: string, limit: number = 500) => {
+  const response = await axiosInstance.get(
+    `${API_URL}/admin/appointments?limit=${limit}`,
+    {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+  return response.data;
+};

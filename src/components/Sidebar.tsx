@@ -192,9 +192,11 @@ import {
   PhoneCall, 
   FileUp, 
   FileText, 
-  Mic, 
+  Mic,
+  Calendar,
   LogOut,
   Settings,
+  Target,
 } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
@@ -209,10 +211,12 @@ const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={20} /> },
     { label: "Initiate Call", path: "/call", icon: <PhoneCall size={20} /> },
+    { label: "Campaigns", path: "/campaigns", icon: <Target size={20} /> },
+    { label: "Appointments", path: "/appointments", icon: <Calendar size={20} /> },
     { label: "Upload CSV", path: "/upload-csv", icon: <FileUp size={20} /> },
-    { label: "Add Prompt", path: "/add-prompt", icon: <FileText size={20} /> },
+    // { label: "Add Prompt", path: "/add-prompt", icon: <FileText size={20} /> },
     { label: "Agents Voice", path: "/voice", icon: <Mic size={20} /> },
-    { label: "Settings", path: "/settings", icon: <Settings size={20} /> },
+    { label: "Prompts", path: "/settings", icon: <FileText size={20} /> },
   ];
 
   const handleLogout = () => {

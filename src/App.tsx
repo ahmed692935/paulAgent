@@ -12,7 +12,10 @@ import LandingPage from "./pages/LandingPage";
 import UploadCsv from "./pages/UploadCsv";
 import AgentVoice from "./pages/AgentVoice";
 import RetellFlowEditor from "./pages/RetellFlowEditor";
+import Appointments from "./pages/Appointments";
+import Campaigns from "./pages/Campaigns";
 // import GoogleCallback from "./pages/SuccessGoogleAuth";
+
 import Success from "./pages/success";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
@@ -60,6 +63,22 @@ function App() {
               // <PublicRoute>
               <ResetPassword />
               // </PublicRoute>
+            }
+          />
+          <Route
+            path="/appointments"
+            element={
+              <PrivateRoute>
+                <Appointments />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/campaigns"
+            element={
+              <PrivateRoute>
+                <Campaigns />
+              </PrivateRoute>
             }
           />
           <Route

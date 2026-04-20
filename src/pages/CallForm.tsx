@@ -22,6 +22,8 @@ import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { getAgentVoice } from "../api/Voice";
 import type { RetellVoiceListItem } from "../interfaces/callForm";
+import { Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function buildBulkCallSystemPrompt(
   settings: { global_prompt: string; intro_text: string } | null,
@@ -75,6 +77,7 @@ function CallForm() {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector(
     (state: RootState) => state.auth.token ?? state.auth.user?.access_token ?? null
   );
@@ -585,21 +588,39 @@ function CallForm() {
             </AnimatePresence>
 
             {/* Main Submit */}
-            <div className="pt-6">
+            <div className="flex flex-col md:flex-row gap-4 pt-6">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-3 py-6 bg-brand-primary text-white font-black uppercase tracking-widest text-sm rounded-[2rem] hover:bg-brand-primary/90 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-[0_25px_50px_rgba(14,165,233,0.3)] disabled:opacity-50"
+                className="flex-[2] flex items-center justify-center gap-3 py-6 bg-brand-primary text-white font-black uppercase tracking-widest text-sm rounded-[2rem] hover:bg-brand-primary/90 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-[0_25px_50px_rgba(14,165,233,0.3)] disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    Start the call
+                    Immediate Launch
                     <IoCall size={20} className="rotate-12" />
                   </>
                 )}
               </button>
+
+              {(selectedNumbers.length > 1 || groups.length > 0) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Redirect to Upload or handle campaign creation here
+                    const names = selectedNames.join(", ");
+                    const nums = selectedNumbers.length;
+                    localStorage.setItem("campaign_auto_name", `Manual Entry - ${nums} targets`);
+                    toast.success("Redirecting to Campaign Hub...");
+                    navigate("/campaigns");
+                  }}
+                  className="flex-1 flex items-center justify-center gap-3 py-6 glass border border-white/10 text-white font-black uppercase tracking-widest text-[10px] rounded-[2rem] hover:bg-white/5 transition-all shadow-xl"
+                >
+                  Launch as Campaign
+                  <Play size={16} className="text-brand-primary" />
+                </button>
+              )}
             </div>
           </form>
         </div>

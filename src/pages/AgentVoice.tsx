@@ -66,6 +66,11 @@ function AgentVoice() {
     }
   };
 
+  const filteredVoices = voices.filter(
+    (v) =>
+      v.gender?.toLowerCase() === "male" && v.accent?.toLowerCase() === "american"
+  );
+
   return (
     <div className="py-8 space-y-10 animate-fadeIn max-w-5xl mx-auto">
       <div>
@@ -74,7 +79,7 @@ function AgentVoice() {
           Agents <span className="text-brand-primary">Voice</span>
         </h1>
         <p className="text-gray-400 font-medium tracking-tight">
-          Choose the voice callers hear. Use preview clips to compare options.
+          Choose the voice callers hear. Showing only American male voices.
         </p>
         {currentVoiceId && (
           <p className="text-sm text-gray-500 mt-3">
@@ -94,9 +99,7 @@ function AgentVoice() {
                 <th className="px-8 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                   Voice
                 </th>
-                <th className="px-8 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">
-                  ID
-                </th>
+                
                 <th className="px-8 py-5 text-center text-[10px] font-bold text-gray-500 uppercase tracking-widest">
                   Preview
                 </th>
@@ -112,14 +115,14 @@ function AgentVoice() {
                     <div className="w-10 h-10 border-4 border-brand-primary/30 border-t-brand-primary rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
-              ) : voices.length === 0 ? (
+              ) : filteredVoices.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="py-16 text-center text-gray-500 text-sm">
-                    No voices returned from the API.
+                    No American male voices found.
                   </td>
                 </tr>
               ) : (
-                voices.map((v) => {
+                filteredVoices.map((v) => {
                   const active = v.voice_id === currentVoiceId;
                   return (
                     <tr
@@ -133,13 +136,11 @@ function AgentVoice() {
                         {v.accent && (
                           <span className="block text-[10px] text-gray-500 uppercase tracking-wider mt-1">
                             {v.accent}
-                            {v.provider ? ` · ${v.provider}` : ""}
+                            {/* {v.provider ? ` · ${v.provider}` : ""} */}
                           </span>
                         )}
                       </td>
-                      <td className="px-8 py-5 text-xs font-mono text-gray-400 max-w-[180px] truncate">
-                        {v.voice_id}
-                      </td>
+                     
                       <td className="px-8 py-5 text-center">
                         {v.preview_audio_url ? (
                           <audio
