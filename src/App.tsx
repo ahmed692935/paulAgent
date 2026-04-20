@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PublicRoute from "./routes/public";
 import { Toaster } from "react-hot-toast";
 import SignIn from "./pages/Auth/signIn";
@@ -10,7 +10,8 @@ import CallForm from "./pages/CallForm";
 import AddPrompt from "./pages/AddPrompt";
 import LandingPage from "./pages/LandingPage";
 import UploadCsv from "./pages/UploadCsv";
-import AgentVoice from "./pages/AgentVoice"
+import AgentVoice from "./pages/AgentVoice";
+import RetellFlowEditor from "./pages/RetellFlowEditor";
 // import GoogleCallback from "./pages/SuccessGoogleAuth";
 import Success from "./pages/success";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
@@ -106,6 +107,18 @@ function App() {
             element={
               <PrivateRoute>
                 <AgentVoice />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/retell-flow"
+            element={<Navigate to="/settings" replace />}
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <RetellFlowEditor />
               </PrivateRoute>
             }
           />

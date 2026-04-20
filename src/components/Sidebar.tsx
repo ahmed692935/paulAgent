@@ -193,7 +193,8 @@ import {
   FileUp, 
   FileText, 
   Mic, 
-  LogOut 
+  LogOut,
+  Settings,
 } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../store/slices/authSlice";
@@ -211,6 +212,7 @@ const Sidebar = () => {
     { label: "Upload CSV", path: "/upload-csv", icon: <FileUp size={20} /> },
     { label: "Add Prompt", path: "/add-prompt", icon: <FileText size={20} /> },
     { label: "Agents Voice", path: "/voice", icon: <Mic size={20} /> },
+    { label: "Settings", path: "/settings", icon: <Settings size={20} /> },
   ];
 
   const handleLogout = () => {

@@ -12,6 +12,7 @@ import {
   getContacts,
   getAllPrompt,
 } from "../api/Call";
+import { getRetellFlowEditor } from "../api/retell";
 import type { RootState } from "../store/store";
 import { useRef, useEffect, useState } from "react";
 import { IoCall } from "react-icons/io5";
@@ -20,6 +21,31 @@ import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { getAgentVoice } from "../api/Voice";
+import type { RetellVoiceListItem } from "../interfaces/callForm";
+
+function buildBulkCallSystemPrompt(
+  settings: { global_prompt: string; intro_text: string } | null,
+  templateBlock: string
+): string {
+  const parts: string[] = [];
+  const globalPart = settings?.global_prompt?.trim() ?? "";
+  const introPart = settings?.intro_text?.trim() ?? "";
+  const templatePart = templateBlock?.trim() ?? "";
+  if (globalPart) parts.push(globalPart);
+  if (introPart) parts.push(`Call opening instructions:\n${introPart}`);
+  if (templatePart) parts.push(templatePart);
+  return parts.join("\n\n---\n\n");
+}
+
+function normalizeBulkCallResponse(res: unknown): string | null {
+  if (res == null) return null;
+  if (typeof res === "string") return res;
+  if (typeof res === "object" && res !== null && "call_id" in res) {
+    const id = (res as { call_id?: unknown }).call_id;
+    return typeof id === "string" ? id : null;
+  }
+  return null;
+}
 
 function CallForm() {
   const storedUser = localStorage.getItem("user");
@@ -42,14 +68,16 @@ function CallForm() {
       context: "",
       system_prompt: "",
       first_names: [],
-      language: user?.language || "english",
+      language: user?.language || "en",
       voice: "",
       groups: [],
     },
   });
 
   const dispatch = useDispatch();
-  const token = useSelector((state: RootState) => state.auth.user?.access_token);
+  const token = useSelector(
+    (state: RootState) => state.auth.token ?? state.auth.user?.access_token ?? null
+  );
   const { openPopup } = useSelector((state: RootState) => state.call);
 
   const [groups, setGroups] = useState<CallGroup[]>([]);
@@ -66,8 +94,12 @@ function CallForm() {
   const [typedContext, setTypedContext] = useState("");
   const [showPromptDropdown, setShowPromptDropdown] = useState(false);
 
-  const [agentVoices, setAgentVoices] = useState<Array<{ voice_id: string; voice_name: string }>>([]);
+  const [agentVoices, setAgentVoices] = useState<RetellVoiceListItem[]>([]);
   const [loadingVoices, setLoadingVoices] = useState(true);
+  const [settingsFlowPrompts, setSettingsFlowPrompts] = useState<{
+    global_prompt: string;
+    intro_text: string;
+  } | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,8 +118,9 @@ function CallForm() {
         const response = await getContacts(token);
         setContacts(response);
         setFilteredContacts(response);
-      } catch (err) {
-        console.error("Failed to fetch contacts", err);
+      } catch {
+        setContacts([]);
+        setFilteredContacts([]);
       }
     };
     fetchContacts();
@@ -107,19 +140,41 @@ function CallForm() {
   }, [token]);
 
   useEffect(() => {
+    const loadSettingsPrompts = async () => {
+      if (!token) return;
+      try {
+        const data = await getRetellFlowEditor(token);
+        setSettingsFlowPrompts({
+          global_prompt: data.global_prompt ?? "",
+          intro_text: data.intro_text ?? "",
+        });
+      } catch {
+        setSettingsFlowPrompts(null);
+      }
+    };
+    loadSettingsPrompts();
+  }, [token]);
+
+  useEffect(() => {
     const fetchVoices = async () => {
       setLoadingVoices(true);
       try {
         if (!token) return;
         const res = await getAgentVoice(token);
         setAgentVoices(res.voices || []);
+        const defaultName = res.current_voice_id
+          ? res.voices?.find((v) => v.voice_id === res.current_voice_id)?.voice_name
+          : undefined;
+        if (defaultName) {
+          setValue("voice", defaultName, { shouldValidate: true });
+        }
       } catch (error) {
         console.log(error);
       }
       setLoadingVoices(false);
     };
     fetchVoices();
-  }, [token]);
+  }, [token, setValue]);
 
   useEffect(() => {
     if (openPopup) {
@@ -150,6 +205,7 @@ function CallForm() {
 
   const handleAddGroup = () => {
     const currentContext = typedContext || getValues("context");
+    console.log(selectedNumbers);
     if (selectedNumbers.length === 0) {
       toast.error("Select targets first.");
       return;
@@ -215,19 +271,36 @@ function CallForm() {
         }
       }
 
+      for (const group of finalGroups) {
+        const merged = buildBulkCallSystemPrompt(
+          settingsFlowPrompts,
+          group.system_prompt
+        );
+        if (!merged.trim()) {
+          toast.error(
+            "Add a global prompt under Settings, or pick a prompt template for this batch."
+          );
+          return;
+        }
+      }
+
       dispatch(createCallStart());
 
       for (const [index, group] of finalGroups.entries()) {
+        const system_prompt = buildBulkCallSystemPrompt(
+          settingsFlowPrompts,
+          group.system_prompt
+        );
+
         const payload = {
+          phone_numbers: group.contacts.map((c) => c.phone_number),
           caller_name: values.caller_name,
           caller_email: values.caller_email,
-          caller_number: values.caller_number,
-          language: values.language,
-          voice: values.voice,
-          phone_numbers: group.contacts.map((c) => c.phone_number),
-          first_names: group.contacts.map((c) => c.first_name),
           context: group.context,
-          system_prompt: group.system_prompt,
+          system_prompt,
+          voice: values.voice?.trim() || "david",
+          language: values.language || "en",
+          first_names: group.contacts.map((c) => c.first_name || null),
         };
 
         try {
@@ -235,12 +308,25 @@ function CallForm() {
             toast.loading(`Deploying group ${index + 1}/${finalGroups.length}...`, { id: "call-loading" });
           }
           const res = await initiateCall(payload, token);
-          dispatch(createCallSuccess(res));
-          localStorage.setItem("lastCallId", res.call_id);
+          const callId = normalizeBulkCallResponse(res);
+          if (callId) {
+            dispatch(createCallSuccess({ call_id: callId }));
+            localStorage.setItem("lastCallId", callId);
+          }
           localStorage.setItem("callerEmail", values.caller_email);
         } catch (err) {
           console.error(`Transmission error in group ${index + 1}`, err);
-          toast.error(`Fault in group ${index + 1} deployment.`);
+          const ax = err as AxiosError<{ detail?: unknown }>;
+          const detail = ax.response?.data?.detail;
+          const msg =
+            Array.isArray(detail) && detail[0]?.msg
+              ? String(detail[0].msg)
+              : ax.response?.data &&
+                  typeof ax.response.data === "object" &&
+                  "message" in ax.response.data
+                ? String((ax.response.data as { message: string }).message)
+                : null;
+          toast.error(msg || `Fault in group ${index + 1} deployment.`);
         }
       }
 
@@ -509,7 +595,7 @@ function CallForm() {
                   <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                    Initialize Neural Transmission
+                    Start the call
                     <IoCall size={20} className="rotate-12" />
                   </>
                 )}

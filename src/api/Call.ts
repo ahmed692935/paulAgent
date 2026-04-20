@@ -97,21 +97,29 @@ export const uploadContactsFile = async (file: File, token: string) => {
   return response.data;
 };
 
-// GET contacts for CallForm autocomplete
-export const getContacts = async (token: string) => {
-  const response = await axiosInstance.get(`${API_URL}/contacts`, {
-    headers: {
-      "ngrok-skip-browser-warning": "true ",
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    },
-  });
-  // response.contacts me array hai
-  // sirf name & phone_number return karo
-  return response.data.contacts.map((c: any) => ({
-    firstName: c.name,
-    phoneNumber: c.phone_number,
-  }));
+// GET contacts for CallForm autocomplete (optional — many deployments omit this route)
+export const getContacts = async (
+  token: string
+): Promise<{ firstName: string; phoneNumber: string }[]> => {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/contacts`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+    const raw = response.data?.contacts;
+    if (!Array.isArray(raw)) return [];
+    return raw.map((c: Record<string, unknown>) => ({
+      firstName: String(c.name ?? c.first_name ?? ""),
+      phoneNumber: String(c.phone_number ?? c.phone ?? ""),
+    }));
+  } catch (e: unknown) {
+    const status = (e as { response?: { status?: number } })?.response?.status;
+    if (status === 404) return [];
+    throw e;
+  }
 };
 
 
@@ -132,20 +140,24 @@ export const createPrompt = async (data: CallFormInputs, token: string) => {
   return response.data;
 };
 
-// get all prompts
+// get all prompts (optional — 404 yields empty list for Retell-only backends)
 export const getAllPrompt = async (token: string) => {
-  const response = await axiosInstance.get(
-    `${API_URL}/prompts`,
-    {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/prompts`, {
       headers: {
-        "ngrok-skip-browser-warning": "true ",
+        "ngrok-skip-browser-warning": "true",
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-    }
-  );
-  return response.data.prompts; 
+    });
+    const list = response.data?.prompts;
+    return Array.isArray(list) ? list : [];
+  } catch (e: unknown) {
+    const status = (e as { response?: { status?: number } })?.response?.status;
+    if (status === 404) return [];
+    throw e;
+  }
 };
 
 

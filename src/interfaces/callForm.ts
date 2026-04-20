@@ -18,22 +18,24 @@ export interface CallFormInputs {
   context?: string;         // Optional now
   system_prompt?: string;   // Optional now
   first_names?: string[];   // Optional now
-  language: "english" | "spanish";
+  language: string;
   voice: string;
   groups: CallGroup[];      // New field
 }
 
+/** POST /assistant-bulk-call (Retell bulk call) */
 export interface InitiateCallPayload {
+  phone_numbers: string[];
   caller_name: string;
   caller_email: string;
-  caller_number: string;
-  phone_numbers: string[];
-  objective?: string;
   context: string;
   system_prompt: string;
-  first_names: string[];
-  language: "english" | "spanish";
   voice: string;
+  language: string;
+  first_names: (string | null)[];
+  first_name?: string | null;
+  email?: string | null;
+  category?: string | null;
 }
 
 export interface TranscriptLine {
@@ -68,5 +70,22 @@ export interface PromptFormValues {
 
 export interface AgentVoice {
   voice_id: string;
-  voice_name: string
+  voice_name: string;
+}
+
+/** Retell GET /retell/voices */
+export interface RetellVoiceListItem {
+  voice_id: string;
+  voice_name: string;
+  provider?: string;
+  gender?: string;
+  age?: string;
+  accent?: string;
+  language?: string | null;
+  preview_audio_url?: string;
+}
+
+export interface RetellVoicesResponse {
+  current_voice_id: string;
+  voices: RetellVoiceListItem[];
 }

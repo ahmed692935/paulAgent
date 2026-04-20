@@ -1053,7 +1053,7 @@ const Dashboard = () => {
             Call Distribution
           </h3>
           <div className="h-[300px] w-full relative">
-            {ready && (
+            {ready ? (              
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -1084,7 +1084,11 @@ const Dashboard = () => {
                   <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
                 </PieChart>
               </ResponsiveContainer>
-            )}
+            ):
+              <div className="flex items-center justify-center h-full text-gray-400 text-sm font-bold">
+                   No call data available
+             </div>
+            }
           </div>
         </div>
 
