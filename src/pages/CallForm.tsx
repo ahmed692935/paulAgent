@@ -20,9 +20,7 @@ import { FiX, FiTrash2 } from "react-icons/fi";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { getAgentVoice } from "../api/Voice";
-import type { RetellVoiceListItem } from "../interfaces/callForm";
-import { Play } from "lucide-react";
+import { Play, Shield, Zap, Search, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function buildBulkCallSystemPrompt(
@@ -97,8 +95,6 @@ function CallForm() {
   const [typedContext, setTypedContext] = useState("");
   const [showPromptDropdown, setShowPromptDropdown] = useState(false);
 
-  const [agentVoices, setAgentVoices] = useState<RetellVoiceListItem[]>([]);
-  const [loadingVoices, setLoadingVoices] = useState(true);
   const [settingsFlowPrompts, setSettingsFlowPrompts] = useState<{
     global_prompt: string;
     intro_text: string;
@@ -158,26 +154,6 @@ function CallForm() {
     loadSettingsPrompts();
   }, [token]);
 
-  useEffect(() => {
-    const fetchVoices = async () => {
-      setLoadingVoices(true);
-      try {
-        if (!token) return;
-        const res = await getAgentVoice(token);
-        setAgentVoices(res.voices || []);
-        const defaultName = res.current_voice_id
-          ? res.voices?.find((v) => v.voice_id === res.current_voice_id)?.voice_name
-          : undefined;
-        if (defaultName) {
-          setValue("voice", defaultName, { shouldValidate: true });
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      setLoadingVoices(false);
-    };
-    fetchVoices();
-  }, [token, setValue]);
 
   useEffect(() => {
     if (openPopup) {
@@ -348,65 +324,90 @@ function CallForm() {
   };
 
   return (
-    <div className="py-8 space-y-12 animate-fadeIn max-w-5xl mx-auto text-white">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-          Communication <span className="text-brand-primary">Engine</span>
-        </h1>
-        <p className="text-gray-400 font-medium tracking-tight max-w-2xl mx-auto">
-          Deploy intelligent agents to handle your outbound communications with human-like precision.
-        </p>
+    <div className="py-8 space-y-12 animate-fadeIn max-w-7xl mx-auto">
+      {/* Header Section */}
+      <div className="bg-white p-10 rounded-[14px] border border-slate-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/5 rounded-full -mr-32 -mt-32 blur-3xl" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-black uppercase tracking-widest mb-4 border border-emerald-100">
+              <Zap size={12} />
+              <span>Outbound Calling System</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-2">
+              Calling <span className="text-brand-primary">System</span>
+            </h1>
+            <p className="text-slate-600 font-medium max-w-xl">
+              Initialize and manage intelligent agents to handle outbound calling communications.
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-4">
+             <div className="text-right hidden sm:block">
+               <p className="text-2xl font-black text-emerald-500">100%</p>
+             </div>
+             <div className="h-12 w-px bg-slate-200 hidden sm:block" />
+             <div className="p-3.5 bg-slate-50 text-brand-primary rounded-[14px] border border-slate-200 shadow-sm">
+               <Shield size={24} />
+             </div>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Main Configuration Card */}
-        <div className="lg:col-span-12 glass rounded-[3.5rem] p-10 md:p-14 border border-white/5 shadow-2xl">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+      <div className="grid grid-cols-1 gap-10">
+        {/* Main Configuration Panel */}
+        <div className="bg-white rounded-[14px] border border-slate-300 shadow-sm p-10 md:p-14 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-slate-50 rounded-full -mr-20 -mt-20" />
+          
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-12 relative z-10 text-left">
             {/* Identity Group */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Authorized Identity</label>
-                <input
-                  type="text"
-                  {...register("caller_name", { required: "Identity required" })}
-                  className={`w-full px-6 py-4 glass !bg-white/5 border border-white/5 rounded-2xl text-white focus:border-brand-primary/30 outline-none transition-all font-medium text-sm ${errors.caller_name ? "border-brand-accent/50" : ""}`}
-                  placeholder="Your Name"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Deployment Email</label>
-                <input
-                  type="email"
-                  {...register("caller_email", { 
-                    required: "Email required",
-                    pattern: { value: /\S+@\S+\.\S+/, message: "Invalid format" }
-                  })}
-                  className={`w-full px-6 py-4 glass !bg-white/5 border border-white/5 rounded-2xl text-white focus:border-brand-primary/30 outline-none transition-all font-medium text-sm ${errors.caller_email ? "border-brand-accent/50" : ""}`}
-                  placeholder="name@company.com"
-                />
-              </div>
-            </div>
-
-            {/* Distribution Group */}
-            <div className="space-y-8 p-10 bg-white/[0.02] border border-white/5 rounded-[2.5rem]">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center">
-                  <IoCall size={16} />
-                </div>
-                <h3 className="text-lg font-bold text-white tracking-tight">Transmission Targets</h3>
-              </div>
-
+            {/* <div className="space-y-6">
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Neural Identification</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Authorized Identity</label>
+                  <input
+                    type="text"
+                    {...register("caller_name", { required: "Identity required" })}
+                    className={`w-full px-6 py-4 bg-slate-50 border border-slate-300 rounded-[14px] text-slate-900 focus:outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm ${errors.caller_name ? "border-red-500" : ""}`}
+                    placeholder="Your Professional Handle"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Operational Email</label>
+                  <input
+                    type="email"
+                    {...register("caller_email", { 
+                      required: "Email required",
+                      pattern: { value: /\S+@\S+\.\S+/, message: "Invalid format" }
+                    })}
+                    className={`w-full px-6 py-4 bg-slate-50 border border-slate-300 rounded-[14px] text-slate-900 focus:outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm ${errors.caller_email ? "border-red-500" : ""}`}
+                    placeholder="name@organization.com"
+                  />
+                </div>
+              </div>
+            </div> */}
+
+            {/* Distribution Network */}
+            <div className="space-y-8 p-10 bg-slate-50/50 border border-slate-300 rounded-[14px] relative">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-[14px] bg-brand-primary/10 text-brand-primary flex items-center justify-center shadow-sm">
+                  <IoCall size={18} />
+                </div>
+                <h3 className="text-xl font-black text-slate-900 tracking-tight">Target Nodes</h3>
+              </div>
+
+              <div className="grid grid-cols-1 gap-8">
                 {/* Contacts Multi-Select */}
-                <div className="relative space-y-2" ref={dropdownRef}>
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Search or Enter Numbers</label>
-                  <div className={`flex flex-wrap items-center gap-2 w-full min-h-[58px] px-4 py-3 glass !bg-white/5 border border-white/5 rounded-2xl focus-within:border-brand-primary/30 transition-all ${errors.phone_numbers ? "border-brand-accent/50" : ""}`} onClick={() => inputRef.current?.focus()}>
+                <div className="relative space-y-3" ref={dropdownRef}>
+                  <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">Enter Numbers:</label>
+                  <div className={`flex flex-wrap items-center gap-2 w-full min-h-[64px] px-5 py-3 bg-white border border-slate-300 rounded-[14px] focus-within:border-brand-primary focus-within:ring-4 focus-within:ring-brand-primary/5 shadow-sm transition-all ${errors.phone_numbers ? "border-red-500" : ""}`} onClick={() => inputRef.current?.focus()}>
                     {selectedNumbers.map((num, index) => (
-                      <span key={index} className="bg-brand-primary/10 text-brand-primary border border-brand-primary/20 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2">
+                      <span key={index} className="bg-slate-900 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
                         {selectedNames[index] || "User"}: {num}
-                        <button type="button" onClick={() => handleRemoveContact(index)} className="hover:text-white transition-colors">
+                        <button type="button" onClick={() => handleRemoveContact(index)} className="hover:text-brand-primary transition-colors">
                           <FiX size={14} />
                         </button>
                       </span>
@@ -434,15 +435,16 @@ function CallForm() {
                           setTypedValue("");
                         }
                       }}
-                      className="flex-1 outline-none bg-transparent text-white text-sm placeholder-gray-600 min-w-[120px]"
-                      placeholder="+1234567890"
+                      className="flex-1 outline-none bg-transparent text-slate-900 font-bold text-base placeholder-slate-400 min-w-[150px]"
+                      placeholder="Enter number..."
                     />
+                    <Search className="text-slate-400 mr-2" size={18} />
                   </div>
 
                   {/* Contact Dropdown */}
                   <AnimatePresence>
                     {showDropdown && filteredContacts.length > 0 && (
-                      <motion.ul initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute z-50 mt-2 w-full max-h-60 overflow-y-auto glass border border-white/10 rounded-2xl shadow-2xl p-2 dropdown">
+                      <motion.ul initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="absolute z-50 mt-2 w-full max-h-60 overflow-y-auto bg-white border border-slate-300 rounded-[14px] shadow-2xl p-2 custom-scrollbar">
                         {filteredContacts.map((c, idx) => (
                           <li
                             key={idx}
@@ -460,10 +462,10 @@ function CallForm() {
                               setTypedValue("");
                               setShowDropdown(false);
                             }}
-                            className="px-6 py-4 cursor-pointer hover:bg-white/5 rounded-xl transition-all flex items-center justify-between group"
+                            className="px-6 py-4 cursor-pointer hover:bg-slate-50 rounded-lg transition-all flex items-center justify-between group"
                           >
-                            <span className="text-white font-bold text-sm tracking-tight">{c.firstName}</span>
-                            <span className="text-brand-primary text-xs font-medium opacity-50 group-hover:opacity-100 transition-opacity">{c.phoneNumber}</span>
+                            <span className="text-slate-900 font-black text-sm tracking-tight">{c.firstName}</span>
+                            <span className="text-brand-primary text-xs font-bold opacity-50 group-hover:opacity-100 transition-opacity">{c.phoneNumber}</span>
                           </li>
                         ))}
                       </motion.ul>
@@ -472,30 +474,30 @@ function CallForm() {
                 </div>
 
                 {/* Agent Selection */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Neural Personality</label>
+                {/* <div className="space-y-3 text-left">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Neural Personality</label>
                   <select
                     {...register("voice", { required: "Agent required" })}
-                    className={`w-full px-6 py-4 glass !bg-white/5 border border-white/5 rounded-2xl text-white focus:border-brand-primary/30 outline-none transition-all font-medium text-sm appearance-none ${errors.voice ? "border-brand-accent/50" : ""}`}
+                    className={`w-full px-6 py-4 bg-white border border-slate-300 rounded-[14px] text-slate-900 focus:outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-sm appearance-none shadow-sm ${errors.voice ? "border-red-500" : ""}`}
                   >
-                    <option value="" className="bg-dark-bg text-white">Establish Neural Link...</option>
+                    <option value="" className="text-slate-400">Establish Neural Link...</option>
                     {loadingVoices ? (
-                      <option disabled className="bg-dark-bg text-white">Synchronizing personalities...</option>
+                      <option disabled>Synchronizing personalities...</option>
                     ) : (
                       agentVoices.map((agent) => (
-                        <option key={agent.voice_id} value={agent.voice_name} className="bg-dark-bg text-white">
+                        <option key={agent.voice_id} value={agent.voice_name}>
                           {agent.voice_name}
                         </option>
                       ))
                     )}
                   </select>
-                </div>
+                </div> */}
               </div>
 
               {/* Context / Prompt Builder */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-                <div className="relative space-y-2">
-                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Operational Context</label>
+                <div className="relative space-y-3">
+                  <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">Context:</label>
                   <input
                     value={typedContext}
                     onChange={(e) => {
@@ -504,19 +506,19 @@ function CallForm() {
                       setShowPromptDropdown(true);
                     }}
                     onFocus={() => setShowPromptDropdown(true)}
-                    placeholder="Define or select logic..."
-                    className={`w-full px-6 py-4 glass !bg-white/5 border border-white/5 rounded-2xl text-white focus:border-brand-primary/30 outline-none transition-all font-medium text-sm ${errors.context ? "border-brand-accent/50" : ""}`}
+                    placeholder="Search or define custom objective..."
+                    className={`w-full px-6 py-4 bg-white border border-slate-300 rounded-[14px] text-slate-900 focus:outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all font-bold text-base shadow-sm placeholder-slate-400 ${errors.context ? "border-red-500" : ""}`}
                   />
                   
                   <AnimatePresence>
                     {showPromptDropdown && prompts.length > 0 && (
-                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute z-10 mt-2 w-full glass border border-white/10 rounded-2xl shadow-2xl max-h-60 overflow-y-auto p-2 dropdown">
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} className="absolute z-10 mt-2 w-full bg-white border border-slate-300 rounded-[14px] shadow-2xl max-h-60 overflow-y-auto p-2 custom-scrollbar">
                         {prompts
                           .filter((p) => p.prompt_name.toLowerCase().includes(typedContext.toLowerCase()))
                           .map((prompt) => (
                             <div
                               key={prompt.id}
-                              className="px-6 py-4 hover:bg-brand-primary/10 hover:text-brand-primary cursor-pointer rounded-xl text-white text-sm font-bold transition-all text-left"
+                              className="px-6 py-4 hover:bg-slate-50 hover:text-brand-primary cursor-pointer rounded-lg text-slate-900 text-sm font-black transition-all text-left"
                               onClick={() => {
                                 setTypedContext(prompt.prompt_name);
                                 setValue("context", prompt.prompt_name);
@@ -532,22 +534,24 @@ function CallForm() {
                   </AnimatePresence>
                 </div>
 
-                <div className="flex gap-4">
-                   <div className="flex-1 space-y-2 text-left">
-                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Neural Protocol</label>
+                <div className="flex flex-col sm:flex-row items-end gap-5">
+                   <div className="flex-1 space-y-3 text-left">
+                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">Languages:</label>
                     <select
                       {...register("language")}
-                      className="w-full px-6 py-4 glass !bg-white/5 border border-white/5 rounded-2xl text-white outline-none transition-all font-medium text-sm appearance-none"
+                      className="w-full px-6 py-4 bg-white border border-slate-300 rounded-[14px] text-slate-900 outline-none focus:border-brand-primary transition-all font-bold text-base appearance-none shadow-sm"
                     >
-                      <option value="en" className="bg-dark-bg text-white">English V4.0</option>
+                      <option value="en">English (Neural Optimized)</option>
+                      <option value="es">Spanish (Beta Link)</option>
                     </select>
                   </div>
                   <button
                     type="button"
                     onClick={handleAddGroup}
-                    className="px-8 py-4 bg-brand-secondary text-white font-black uppercase tracking-widest text-[10px] rounded-2xl hover:bg-brand-secondary/80 transition-all active:scale-95 shadow-[0_15px_30px_rgba(99,102,241,0.2)]"
+                    className="h-14 px-8 bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-[14px] hover:bg-slate-800 transition-all active:scale-95 shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2"
                   >
-                    Stage Group
+                    <Plus size={16} />
+                    Create Group
                   </button>
                 </div>
               </div>
@@ -556,28 +560,26 @@ function CallForm() {
             {/* Queue Preview */}
             <AnimatePresence>
               {groups.length > 0 && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="p-10 glass border border-white/10 rounded-[2.5rem] bg-white/[0.01]">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="p-10 bg-white border border-slate-300 rounded-[14px] shadow-inner relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-2 h-full bg-brand-primary" />
                   <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-xl font-black text-white tracking-tighter flex items-center gap-3 text-left">
-                      <span className="flex h-3 w-3 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-secondary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-brand-secondary"></span>
-                      </span>
-                      Transmission Queue ({groups.length})
+                    <h3 className="text-xl font-black text-slate-900 tracking-tighter flex items-center gap-3 text-left">
+                      <Zap size={20} className="text-brand-primary" />
+                      Groups ({groups.length})
                     </h3>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {groups.map((grp, idx) => (
-                      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} key={idx} className="glass border border-white/5 p-6 rounded-3xl flex justify-between items-center group hover:border-brand-secondary/30 transition-all text-left">
-                        <div className="space-y-2">
-                          <p className="text-xs font-black text-brand-secondary uppercase tracking-widest">Logic Node {idx + 1}</p>
-                          <p className="text-sm font-medium text-white line-clamp-1">{grp.context}</p>
-                          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                            {grp.contacts.length} Targets Synchronized
-                          </p>
+                      <motion.div layout initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} key={idx} className="bg-slate-50 border border-slate-200 p-6 rounded-[14px] flex justify-between items-start group hover:border-brand-primary transition-all text-left">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-2">
+                             <div className="px-2 py-0.5 bg-slate-900 text-white rounded text-[10px] font-black uppercase">Batch {idx + 1}</div>
+                             <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{grp.contacts.length} Uplinks</p>
+                          </div>
+                          <p className="text-base font-black text-slate-900 line-clamp-2 leading-tight">{grp.context}</p>
                         </div>
-                        <button type="button" onClick={() => handleRemoveGroup(idx)} className="p-3 glass rounded-xl text-brand-accent hover:bg-brand-accent/20 transition-all active:scale-90">
+                        <button type="button" onClick={() => handleRemoveGroup(idx)} className="p-2.5 bg-white border border-slate-200 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-all active:scale-90 shadow-sm ml-4">
                           <FiTrash2 size={16} />
                         </button>
                       </motion.div>
@@ -587,38 +589,39 @@ function CallForm() {
               )}
             </AnimatePresence>
 
-            {/* Main Submit */}
-            <div className="flex flex-col md:flex-row gap-4 pt-6">
+            {/* Main Deployment Console */}
+            <div className="flex flex-col md:flex-row gap-5 pt-8">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-[2] flex items-center justify-center gap-3 py-6 bg-brand-primary text-white font-black uppercase tracking-widest text-sm rounded-[2rem] hover:bg-brand-primary/90 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-[0_25px_50px_rgba(14,165,233,0.3)] disabled:opacity-50"
+                className="group relative flex-2 flex items-center justify-center gap-4 py-6 bg-slate-900 text-white font-black uppercase tracking-widest text-sm rounded-[14px] hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/10 disabled:opacity-50 overflow-hidden"
               >
-                {isSubmitting ? (
-                  <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                  <>
-                    Immediate Launch
-                    <IoCall size={20} className="rotate-12" />
-                  </>
-                )}
+                <div className="absolute inset-0 bg-linear-to-r from-brand-primary to-brand-secondary opacity-0 group-hover:opacity-10 transition-opacity" />
+                <span className="relative z-10 flex items-center gap-3">
+                  {isSubmitting ? (
+                    <Loader2 className="animate-spin" size={20} />
+                  ) : (
+                    <>
+                      Start Calling
+                      <IoCall size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </span>
               </button>
 
               {(selectedNumbers.length > 1 || groups.length > 0) && (
                 <button
                   type="button"
                   onClick={() => {
-                    // Redirect to Upload or handle campaign creation here
-                    const names = selectedNames.join(", ");
-                    const nums = selectedNumbers.length;
-                    localStorage.setItem("campaign_auto_name", `Manual Entry - ${nums} targets`);
+                    const nums = selectedNumbers.length + groups.reduce((acc, g) => acc + g.contacts.length, 0);
+                    localStorage.setItem("campaign_auto_name", `Quick Launch - ${nums} targets`);
                     toast.success("Redirecting to Campaign Hub...");
                     navigate("/campaigns");
                   }}
-                  className="flex-1 flex items-center justify-center gap-3 py-6 glass border border-white/10 text-white font-black uppercase tracking-widest text-[10px] rounded-[2rem] hover:bg-white/5 transition-all shadow-xl"
+                  className="flex-1 flex items-center justify-center gap-3 py-6 bg-white border border-slate-300 text-slate-900 font-black uppercase tracking-widest text-xs rounded-[14px] hover:bg-slate-50 transition-all shadow-sm cursor-pointer"
                 >
-                  Launch as Campaign
-                  <Play size={16} className="text-brand-primary" />
+                  Create campaign
+                  <Play size={14} className="text-brand-primary" fill="currentColor" />
                 </button>
               )}
             </div>
@@ -626,42 +629,38 @@ function CallForm() {
         </div>
       </div>
 
-      {/* ==== Popup ==== */}
+      {/* Modern Deployment Popup */}
       <AnimatePresence>
         {openPopup && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-99999 flex items-center justify-center p-6">
             <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-dark-bg/80 backdrop-blur-xl" 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" 
               onClick={() => dispatch(togglePopup(false))} 
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }} 
-              animate={{ opacity: 1, scale: 1, y: 0 }} 
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="relative glass w-full max-w-lg rounded-[3.5rem] p-10 md:p-14 border border-white/10 shadow-2xl text-center"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }}
+              className="relative bg-white w-full max-w-md rounded-[14px] p-12 border border-slate-300 shadow-2xl text-center overflow-hidden"
             >
-              <div className="flex flex-col items-center justify-center py-5">
-                <div className="relative mb-12">
-                  <span className="absolute inset-0 rounded-full bg-brand-primary opacity-20 animate-ping"></span>
-                  <div className="w-24 h-24 rounded-full bg-brand-primary flex items-center justify-center shadow-[0_0_50px_rgba(14,165,233,0.4)] relative overflow-hidden">
+               <div className="absolute top-0 left-0 w-full h-2 bg-brand-primary shadow-[0_0_20px_rgba(14,165,233,0.5)]" />
+               
+               <div className="flex flex-col items-center justify-center py-6">
+                <div className="relative mb-10 group">
+                  <div className="absolute inset-0 rounded-full bg-brand-primary opacity-20 animate-ping group-hover:animate-none scale-150" />
+                  <div className="w-24 h-24 rounded-full bg-slate-900 flex items-center justify-center relative z-10 shadow-2xl">
                     <IoCall color="white" size={36} className="animate-pulse" />
                   </div>
                 </div>
                 
-                <h2 className="text-4xl font-black text-white tracking-tighter mb-4">Transmission Active</h2>
-                <p className="text-gray-400 font-medium text-sm mb-10">Initializing neural links across all programmed nodes. Redirecting to mission control...</p>
+                <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-4 uppercase">Link Active</h2>
+                <p className="text-slate-500 font-medium text-sm mb-12 leading-relaxed">Neural transmission in progress. Mission parameters are being uploaded to designated sectors. Standardizing uplink...</p>
 
-                <div className="flex justify-center">
-                  <button
-                    onClick={() => dispatch(togglePopup(false))}
-                    className="px-10 py-4 glass border border-white/10 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl hover:bg-white/5 transition-all focus:outline-none"
-                  >
-                    Dismiss Uplink
-                  </button>
-                </div>
+                <button
+                  onClick={() => dispatch(togglePopup(false))}
+                  className="w-full py-5 bg-slate-900 text-white font-black uppercase tracking-widest text-[10px] rounded-[14px] hover:bg-slate-800 transition-all hover:shadow-xl active:scale-95"
+                >
+                  Confirm Operational Status
+                </button>
               </div>
             </motion.div>
           </div>
@@ -670,5 +669,22 @@ function CallForm() {
     </div>
   );
 }
+
+const Loader2 = ({ size = 24, className = "" }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={`animate-spin ${className}`}
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
 
 export default CallForm;

@@ -25,11 +25,13 @@ export interface CampaignRun {
 }
 
 export interface CampaignStats {
+  success: boolean;
+  campaign_id: number;
   total_contacts: number;
   call_stats: {
-    total: number;
-    completed: number;
-    not_completed: number;
+    total_calls: number;
+    completed_calls: number;
+    not_completed_calls: number;
   };
 }
 

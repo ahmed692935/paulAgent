@@ -40,28 +40,29 @@ export const fetchCallHistory = async (
 //   return audioUrl;
 // };
 
-export const fetchRecordingStream = async (call_Id: string, token: string) => {
-  const response = await axiosInstance.get(
-    `${API_URL}/calls/${call_Id}/recording`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "ngrok-skip-browser-warning": "true",
-        Accept: "audio/mpeg", // or "application/octet-stream" depending on backend
-      },
-      // responseType: "blob", // so it treats it as binary audio data
-    }
-  );
+// export const fetchRecordingStream = async (call_Id: string, token: string) => {
+//   const response = await axiosInstance.get(
+//     `${API_URL}/calls/${call_Id}/recording`,
+//     {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "ngrok-skip-browser-warning": "true",
+//         Accept: "audio/mpeg", 
+//       },
+//     }
+//   );
+//   return response.data
+// };
 
-  // Convert to a playable blob URL
-  // const audioUrl = URL.createObjectURL(response.data);
-  // return audioUrl;
-  return response.data
-};
 
-export const fetchCallTranscript = async (callId: string, token: string) => {
+
+
+// ==========================
+// Google Calendar Login 
+// ==========================
+export const getGoogleAuth = async (token: string) => {
   const response = await axiosInstance.get(
-    `${API_URL}/calls/${callId}/transcript`,
+    `${API_URL}/google/auth/login`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,14 +76,10 @@ export const fetchCallTranscript = async (callId: string, token: string) => {
   return response.data;
 };
 
-
-
 // ==========================
-// Google Calendar Login 
-// ==========================
-export const getGoogleAuth = async (token: string) => {
+export const getAnalyticsSummary = async (token: string) => {
   const response = await axiosInstance.get(
-    `${API_URL}/google/auth/login`,
+    `${API_URL}/analytics-summary`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
