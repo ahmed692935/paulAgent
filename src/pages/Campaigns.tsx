@@ -480,18 +480,6 @@ import type {
   CampaignRun,
 } from "../interfaces/campaign";
 
-const COLORS = {
-  primary: "#ff6d1f",
-  primaryLight: "#ff8f54",
-  accent: "#ffcfb4",
-  bgMain: "#fffcf4",
-  bgSidebar: "#faf3e1",
-  textDark: "#222222",
-  textLight: "#606060",
-  white: "#ffffff",
-  success: "#22c55e",
-};
-
 const Campaigns = () => {
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
