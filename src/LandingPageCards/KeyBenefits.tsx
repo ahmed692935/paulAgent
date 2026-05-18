@@ -13,12 +13,12 @@ function KeyBenefits() {
     const benefits = [
         {
             title: "Boost Efficiency & Save Time",
-            desc: "No more wasting hours on repetitive calls. Paul.ai automates tasks so your team can focus on high-value work.",
+            desc: "No more wasting hours on repetitive calls. Dialer.ai automates tasks so your team can focus on high-value work.",
             icon: <Zap size={28} />,
         },
         {
             title: "Cut Costs by 70–80%",
-            desc: "Eliminate the need for large call center teams—Paul.ai delivers scalable AI-powered calls at a fraction of the cost.",
+            desc: "Eliminate the need for large call center teams—Dialer.ai delivers scalable AI-powered calls at a fraction of the cost.",
             icon: <TrendingDown size={28} />,
         },
         {
@@ -28,7 +28,7 @@ function KeyBenefits() {
         },
         {
             title: "24/7 Connectivity",
-            desc: "Paul.ai never sleeps, ensuring seamless customer engagement anytime, anywhere around the globe.",
+            desc: "Dialer.ai never sleeps, ensuring seamless customer engagement anytime, anywhere around the globe.",
             icon: <Clock size={28} />,
         },
         {
@@ -62,7 +62,7 @@ function KeyBenefits() {
                         viewport={{ once: true }}
                         className="text-4xl md:text-6xl font-black text-white tracking-tighter"
                     >
-                        Why Paul.ai <span className="text-brand-accent">Stands Out</span>
+                        Why Dialer.ai <span className="text-brand-accent">Stands Out</span>
                     </motion.h2>
                     <motion.p 
                         initial={{ opacity: 0, y: 20 }}

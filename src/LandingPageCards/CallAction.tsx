@@ -6,7 +6,7 @@ function CallAction() {
     {
       title: "Quick to Access",
       value: "24 Hours",
-      desc: "Average time from contract to project kick-off with Paul.ai team",
+      desc: "Average time from contract to project kick-off with Dialer.ai team",
     },
     {
       title: "Quality of Services",
@@ -29,7 +29,7 @@ function CallAction() {
           viewport={{ once: true }}
           className="px-4 py-1 glass rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-brand-primary mb-6"
         >
-          The Engine of Paul.ai
+          The Engine of Dialer.ai
         </motion.span>
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}

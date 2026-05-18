@@ -16,12 +16,12 @@ function UseCases() {
   const useCases = [
     {
       title: "Customer Support",
-      desc: "Deliver 24/7 AI-powered assistance with Paul.ai, without increasing staff costs.",
+      desc: "Deliver 24/7 AI-powered assistance with Dialer.ai, without increasing staff costs.",
       icon: <Headphones size={32} />,
     },
     {
       title: "Appointment Scheduling",
-      desc: "Paul.ai manages bookings, reschedules, and confirmations seamlessly.",
+      desc: "Dialer.ai manages bookings, reschedules, and confirmations seamlessly.",
       icon: <Calendar size={32} />,
     },
     {
@@ -31,17 +31,17 @@ function UseCases() {
     },
     {
       title: "Collections & Reminders",
-      desc: "Automate payment reminders and reduce overdue payments effortlessly with Paul.ai.",
+      desc: "Automate payment reminders and reduce overdue payments effortlessly with Dialer.ai.",
       icon: <Receipt size={32} />,
     },
     {
       title: "HR & Recruitment",
-      desc: "Paul.ai pre-screens candidates, schedules interviews, and follows up automatically.",
+      desc: "Dialer.ai pre-screens candidates, schedules interviews, and follows up automatically.",
       icon: <Users size={32} />,
     },
     {
       title: "Custom Development",
-      desc: "Tailored AI solutions from Paul.ai, designed to meet your unique business needs.",
+      desc: "Tailored AI solutions from Dialer.ai, designed to meet your unique business needs.",
       icon: <Code size={32} />,
     },
   ];
@@ -64,7 +64,7 @@ function UseCases() {
           viewport={{ once: true }}
           className="text-4xl md:text-6xl font-black text-white tracking-tighter"
         >
-          Who Benefits from <span className="text-brand-primary">Paul.ai</span>
+          Who Benefits from <span className="text-brand-primary">Dialer.ai</span>
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ function UseCases() {
           transition={{ delay: 0.1 }}
           className="text-gray-400 text-lg mt-6 max-w-2xl font-medium"
         >
-          Sales & Lead Generation – Let Paul handle cold calls, lead qualification, and follow-ups so you can focus on closing deals.
+          Sales & Lead Generation – Let Dialer handle cold calls, lead qualification, and follow-ups so you can focus on closing deals.
         </motion.p>
       </div>
 

@@ -71,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, setIsCollapsed }
         {/* Logo Section */}
         <div className={`flex items-center justify-between p-8 ${isCollapsed ? "px-4" : "p-8"}`}>
           <Link to="/" className={`text-2xl font-black tracking-tighter text-white transition-all overflow-hidden ${isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"}`}>
-            Paul<span className="text-brand-primary">.ai</span>
+            Dialer<span className="text-brand-primary">.ai</span>
           </Link>
           {isCollapsed && (
             <Link to="/" className="text-xl font-black text-brand-primary mx-auto">P.</Link>

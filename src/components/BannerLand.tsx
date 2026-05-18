@@ -30,7 +30,7 @@ function BannerLand() {
             transition={{ delay: 0.5, duration: 1 }}
             className="absolute inset-0 flex items-center justify-center font-black text-[20vw] whitespace-nowrap select-none pointer-events-none text-white/[0.03] tracking-tighter"
           >
-            PAUL.AI
+            DIALER.AI
           </motion.h2>
           
           <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-8 z-20">

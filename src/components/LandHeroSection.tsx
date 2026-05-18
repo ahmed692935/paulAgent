@@ -36,7 +36,7 @@ function LandHeroSection() {
         >
           <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
           <p className="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-white/70">
-            Paul.ai - The Next Generation Calling Agent
+            Dialer.ai - The Next Generation Calling Agent
           </p>
         </motion.div>
 
@@ -64,7 +64,7 @@ function LandHeroSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-8 max-w-2xl mx-auto text-gray-400 text-sm sm:text-lg md:text-xl font-medium leading-relaxed"
         >
-          Spending too much time on repetitive calls? Let Paul.ai handle your outreach, support, and follow-ups with lifelike AI - freeing you to focus on growth.
+          Spending too much time on repetitive calls? Let Dialer.ai handle your outreach, support, and follow-ups with lifelike AI - freeing you to focus on growth.
         </motion.p>
 
         <motion.div 

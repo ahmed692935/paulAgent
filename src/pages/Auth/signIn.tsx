@@ -1,5 +1,3 @@
-
-
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import type { AppDispatch, RootState } from "../../store/store";
@@ -10,7 +8,8 @@ import type { SignInData } from "../../interfaces/auth";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, Lock, ArrowRight, EyeOff, Eye } from "lucide-react";
+import { useState } from "react";
 
 const SignIn: React.FC = () => {
   const {
@@ -20,6 +19,7 @@ const SignIn: React.FC = () => {
   } = useForm<SignInData>();
 
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { loginLoading } = useSelector((state: RootState) => state.auth);
 
@@ -30,7 +30,7 @@ const SignIn: React.FC = () => {
       const token = response.access_token;
       const user = { ...response.user, access_token: token };
       dispatch(loginSuccess({ user, token }));
-      toast.success("Welcome back to Paul.ai!");
+      toast.success("Welcome back to Dialer.ai!");
       navigate("/dashboard");
     } catch (err: unknown) {
       const error = err as AxiosError<{ error: string }>;
@@ -48,30 +48,41 @@ const SignIn: React.FC = () => {
         <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-brand-secondary/10 blur-[120px] animate-pulse-slow" />
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-md"
       >
         {/* Logo/Brand Section */}
         <div className="text-center mb-10">
-          <Link to="/" className="text-4xl font-black tracking-tighter text-white inline-block mb-4">
-            Paul<span className="text-brand-primary">.ai</span>
+          <Link
+            to="/"
+            className="text-4xl font-black tracking-tighter text-white inline-block mb-4"
+          >
+            Dialer<span className="text-brand-primary">.ai</span>
           </Link>
-          <p className="text-gray-400 font-medium text-sm tracking-widest uppercase">Intelligent Communications</p>
+          <p className="text-gray-400 font-medium text-sm tracking-widest uppercase">
+            Intelligent Communications
+          </p>
         </div>
 
         {/* Form Card */}
         <div className="glass p-8 md:p-12 rounded-[3.5rem] border border-white/5 shadow-2xl">
           <div className="mb-10">
-            <h2 className="text-3xl font-black text-white tracking-tighter mb-2">Welcome Back</h2>
-            <p className="text-gray-500 text-sm font-medium">Verify your identity to access the dashboard.</p>
+            <h2 className="text-3xl font-black text-white tracking-tighter mb-2">
+              Welcome Back
+            </h2>
+            <p className="text-gray-500 text-sm font-medium">
+              Verify your identity to access the dashboard.
+            </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">Corporate Email</label>
+              <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-4">
+                Corporate Email
+              </label>
               <div className="relative group">
                 <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-brand-primary transition-colors">
                   <Mail size={18} />
@@ -83,16 +94,27 @@ const SignIn: React.FC = () => {
                   className="w-full pl-14 pr-6 py-4 glass !bg-white/5 rounded-2xl text-white placeholder-gray-600 border-white/5 focus:border-brand-primary/30 outline-none transition-all font-medium text-sm"
                 />
               </div>
-              {errors.email && <p className="text-brand-accent text-[10px] font-bold uppercase ml-4 mt-1 tracking-wider">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-brand-accent text-[10px] font-bold uppercase ml-4 mt-1 tracking-wider">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             {/* Password Field */}
             <div className="space-y-2">
               <div className="flex justify-between items-center ml-4">
-                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Access Key</label>
-                <Link to="/forgot-password" className="text-[10px] font-bold text-brand-primary uppercase tracking-widest hover:underline">Lost access?</Link>
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                  Access Key
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-[10px] font-bold text-brand-primary uppercase tracking-widest hover:underline"
+                >
+                  Lost access?
+                </Link>
               </div>
-              <div className="relative group">
+              {/* <div className="relative group">
                 <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-brand-primary transition-colors">
                   <Lock size={18} />
                 </div>
@@ -102,8 +124,35 @@ const SignIn: React.FC = () => {
                   {...register("password", { required: "Password is required" })}
                   className="w-full pl-14 pr-6 py-4 glass !bg-white/5 rounded-2xl text-white placeholder-gray-600 border-white/5 focus:border-brand-primary/30 outline-none transition-all font-medium text-sm"
                 />
+              </div> */}
+              <div className="relative group">
+                {/* Lock Icon */}
+                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-brand-primary transition-colors">
+                  <Lock size={18} />
+                </div>
+
+                {/* Input */}
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className="w-full pl-14 pr-14 py-4 glass !bg-white/5 rounded-2xl text-white placeholder-gray-600 border-white/5 focus:border-brand-primary/30 outline-none transition-all font-medium text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="cursor-pointer absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
-              {errors.password && <p className="text-brand-accent text-[10px] font-bold uppercase ml-4 mt-1 tracking-wider">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-brand-accent text-[10px] font-bold uppercase ml-4 mt-1 tracking-wider">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             {/* Submit Button */}
@@ -127,7 +176,12 @@ const SignIn: React.FC = () => {
           <div className="mt-10 text-center">
             <p className="text-gray-500 text-xs font-medium">
               New to the platform?{" "}
-              <Link to="/signup" className="text-brand-primary font-bold hover:underline">Create an Organization</Link>
+              <Link
+                to="/signup"
+                className="text-brand-primary font-bold hover:underline"
+              >
+                Create an Organization
+              </Link>
             </p>
           </div>
         </div>
@@ -240,11 +294,11 @@ export default SignIn;
 //         <div className="flex justify-center mb-2 mt-5">
 //           {/* <div className="bg-gradient-to-l from-[#05A3A9] to-[#6BEE2E] p-2 rounded-lg shadow-lg"> */}
 //           {/* <div>
-//             <img src={Logo} width={150}></img>
-//           </div> */}
+//  <img src={Logo} width={150}></img>
+// </div> */}
 //           {/* <div className="bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] p-2 rounded-lg shadow-lg">
-//             <FiDownload className="text-white text-4xl rotate-270" />
-//           </div> */}
+//  <FiDownload className="text-white text-4xl rotate-270" />
+// </div> */}
 //           <div className="text-[#3F3EED] font-bold">Welcome Back</div>
 //         </div>
 
@@ -253,8 +307,8 @@ export default SignIn;
 //           Login to continue
 //         </div>
 //         {/* <p className="text-gray-500 text-base mb-6 leading-tight">
-//           Welcome back! Please sign in to your account
-//         </p> */}
+//      Welcome back! Please sign in to your account
+//     </p> */}
 
 //         {/* Email */}
 //         <label className=" block mb-5 font-semibold text-sm text-left">
@@ -290,12 +344,12 @@ export default SignIn;
 
 //         {/* Sign In Button */}
 //         {/* <button
-//           type="submit"
-//           className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] text-white py-2 rounded-lg transition-all cursor-pointer"
-//         >
-//           Sign In
-//           <TiArrowRight size={24} className="mt-1" />
-//         </button> */}
+//      type="submit"
+//      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6d0f78] to-[#0a0f2d] text-white py-2 rounded-lg transition-all cursor-pointer"
+//     >
+//      Sign In
+//      <TiArrowRight size={24} className="mt-1" />
+//     </button> */}
 //         {/* Sign In Button */}
 //         <button
 //           type="submit"

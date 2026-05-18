@@ -13,7 +13,7 @@ function ThreeSteps() {
     },
     {
       title: "AI Takes Over",
-      desc: "Paul.ai dials, engages, and responds in real-time, handling interactions just like a human.",
+      desc: "Dialer.ai dials, engages, and responds in real-time, handling interactions just like a human.",
       icon: <Cpu size={40} />,
       color: "brand-secondary"
     },

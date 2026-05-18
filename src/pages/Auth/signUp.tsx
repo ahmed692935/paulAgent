@@ -59,7 +59,7 @@ const SignUp: React.FC = () => {
         {/* Brand Section */}
         <div className="text-center mb-10">
           <Link to="/" className="text-4xl font-black tracking-tighter text-white inline-block mb-4">
-            Paul<span className="text-brand-primary">.ai</span>
+            Dialer<span className="text-brand-primary">.ai</span>
           </Link>
           <p className="text-gray-400 font-medium text-sm tracking-widest uppercase">Start Your Intelligence Journey</p>
         </div>

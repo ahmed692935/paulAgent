@@ -59,7 +59,7 @@ function HeaderLanding() {
               isScrolled ? "text-brand-primary" : "text-white"
             }`}
           >
-            Paul<span className="text-brand-secondary">.ai</span>
+            Dialer<span className="text-brand-secondary">.ai</span>
           </h3>
 
           {/* Desktop Nav */}

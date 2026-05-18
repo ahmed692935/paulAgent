@@ -46,7 +46,7 @@ function FooterLanding() {
           {/* Brand Column */}
           <div className="md:col-span-2">
             <Link to="/" className="text-3xl font-black tracking-tighter text-white">
-              Paul<span className="text-brand-primary">.ai</span>
+              Dialer<span className="text-brand-primary">.ai</span>
             </Link>
             <p className="mt-6 text-gray-400 font-medium leading-relaxed max-w-xs">
               Next-generation AI calling agents that transform how businesses communicate. Real. Fast. Intelligent.
@@ -99,7 +99,7 @@ function FooterLanding() {
         {/* Bottom Bar */}
         <div className="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500 font-medium tracking-wide">
-            © {new Date().getFullYear()} Paul AI Dynamics. Built for the future of calling.
+            © {new Date().getFullYear()} Dialer AI Dynamics. Built for the future of calling.
           </p>
           <div className="flex gap-6">
             <a href="#" className="text-xs text-gray-500 hover:text-white transition-colors">Privacy Policy</a>
