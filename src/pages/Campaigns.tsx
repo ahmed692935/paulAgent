@@ -691,32 +691,34 @@ const Campaigns = () => {
                 </div>
               </div>
               {/* <button 
-                onClick={() => {
-                  // Download template CSV functionality
-                  toast.success("Template download started");
-                }}
-                className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white font-bold text-xs uppercase tracking-widest rounded-[12px] hover:bg-slate-800 transition-all shadow-md"
-              >
-                <Download size={16} />
-                Download Template
-              </button> */}
+          onClick={() => {
+            // Download template CSV functionality
+            toast.success("Template download started");
+          }}
+          className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white font-bold text-xs uppercase tracking-widest rounded-[12px] hover:bg-slate-800 transition-all shadow-md"
+        >
+          <Download size={16} />
+          Download Template
+        </button> */}
             </div>
           </div>
 
           {/* Table Container */}
           <div className="w-full overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
             <div className="overflow-x-auto">
-              <table className="w-full table-fixed min-w-[700px] border-collapse">
+              {/* 1. table-fixed ko hata kar table-auto kiya taake widths content ke mutabiq manage hon */}
+              <table className="w-full table-auto min-w-[700px] border-collapse">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
                     {templateColumns.map((column, idx) => {
-                      const isFirst = idx === 0;
-                      const isLast = idx === templateColumns.length - 1;
+                      // 2. Har column ki width ko perfectly equal share dene ke liye percentage base kiya hai
+                      const columnWidth = `${100 / templateColumns.length}%`;
 
                       return (
                         <th
                           key={idx}
-                          className={`py-4 text-left ${isFirst ? "px-6 w-[30%]" : isLast ? "px-6 text-center w-[15%]" : "px-4"}`}
+                          style={{ width: columnWidth }} // Har column ko exact barabar jagah milegi
+                          className="py-4 px-6 text-left border-r border-slate-100 last:border-r-0"
                         >
                           <span
                             className="text-[11px] font-black text-slate-500 uppercase tracking-wider block truncate"
